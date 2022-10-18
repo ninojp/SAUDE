@@ -1,0 +1,20 @@
+{
+    "name": "meupc/saude",
+    "description": "Praticando o PHP - Loja Saude",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Edenilson João Pereira",
+            "email": "ninocriptocoin@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "core\\" : "core/"
+        },
+        "files": [
+            "config.php"
+        ]
+    }
+}

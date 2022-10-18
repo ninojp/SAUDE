@@ -1,0 +1,36 @@
+@charset "UTF-8";
+/* CSS local app.css*/
+:root{
+    --pt: rgba(0,0,0,1);
+    --br: rgba(255,255,255,1);
+    --verdEsc: rgba(1,52,2,1);
+    --verdSc: rgb(0, 78, 2);
+    --verdM: rgb(0, 116, 4);
+    --verdMc: rgb(141, 221, 144);
+    --verdC: rgb(212, 243, 213);
+    --azuEsc: rgba(5,35,57,1);
+    --azuSc: rgb(0, 29, 135);
+    --azuM: rgba(13,110,253,1);
+    --azuMc: rgb(117, 144, 241);
+    --azuC: rgb(182, 198, 255);
+    --laranja: rgba(240,191,76,1);
+    --gold: rgba(255,215,0,1);
+    --vermelho: rgba(172,2,2,1);
+}
+.navegacao{
+    background-color: var(--verdMc);
+    color: var(--azuEsc);
+}
+.rodape{
+    background-color: var(--verdMc);
+    color: var(--azuEsc);
+}
+.nav_link{
+    text-decoration: none;
+    color: var(--br);
+    margin: 0px 10px;
+}
+.nav_link:hover{
+    text-decoration: underline;
+    color: var(--br);
+}
