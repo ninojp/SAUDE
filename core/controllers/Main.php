@@ -3,6 +3,7 @@ namespace core\controllers;
 
 //indicação dos NAMESPACEs das minhas classes do CORE
 use core\classes\Database;
+use core\classes\EnviarEmail;
 use core\classes\Store;
 use core\models\Clientes;
 
@@ -10,6 +11,8 @@ class Main{
     //============================================================================
     //Apresenta a pagina da INDEX
     public function index(){
+
+
         //minha classe Store com a função Layout()
         Store::Layout([
             'layouts/html_header',
@@ -78,12 +81,18 @@ class Main{
         }
       
         //inserir novo cliente na base de dados e devolver o purl
+        $email_cliente = mb_strtolower(trim($_POST['text_email']));
         $purl = $cliente->registrar_cliente();
       
-        //criar um link purl para enviar o email
-        $link_purl="https://localhost/SAUDE/public/?a=confirmar_email&purl=$purl";
-
-   
+        //envio do email para o cliente
+        $email = new EnviarEmail();
+        
+        $resultado = $email->enviar_email_confirmacao_novo_cliente($email_cliente, $purl);
+        if($resultado){
+            echo 'Email enviado com Sucesso!';
+        }else{
+            echo 'Aconteceu um ERRO!';
+        }
     }
     //============================================================================
     //Apresenta a pagina da CARRINHO
