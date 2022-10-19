@@ -8,6 +8,13 @@
                     <label for="text_email">E-Mail</label>
                     <input class="form-control" type="email" name="text_email" id="text_email" placeholder="Digite seu Email" required>
                 </div>
+                <!-- apresentar erro! -------------------------------------------------->
+                <?php if(isset($_SESSION['erro_email_exist'])):?>
+                    <div class="alert alert-warning text-center p-2">
+                        <?=$_SESSION['erro_email_exist']?>
+                        <?php unset($_SESSION['erro_email_exist'])?>
+                    </div>
+                <?php endif;?>
                 <!-- input senha_1 ----------------------------------------------->
                 <div class="mb-3">
                     <label for="text_senha_1">Digite uma senha</label>
@@ -18,10 +25,11 @@
                     <label for="text_senha_2">Confirme sua senha</label>
                     <input class="form-control" type="password" name="text_senha_2" id="text_senha_2" placeholder="Repita sua Senha" required>
                 </div>
-                <?php if(isset($_SESSION['erro'])):?>
+                <!-- apresentar erro! -------------------------------------------------->
+                <?php if(isset($_SESSION['erro_senha_rep'])):?>
                     <div class="alert alert-warning text-center p-2">
-                        <?=$_SESSION['erro']?>
-                        <?php unset($_SESSION['erro'])?>
+                        <?=$_SESSION['erro_senha_rep']?>
+                        <?php unset($_SESSION['erro_senha_rep'])?>
                     </div>
                 <?php endif;?>
                 <!-- input nome_completo ----------------------------------------------->

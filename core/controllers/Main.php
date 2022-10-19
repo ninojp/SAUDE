@@ -1,5 +1,5 @@
 <?php
-namespace core\controladores;
+namespace core\controllers;
 
 //indicação do NAMESPACE da minha classe Store
 use core\classes\Database;
@@ -49,8 +49,9 @@ class Main{
         ]);
     }
     //============================================================================
+    //Função para VERIFICAR e CRIAR um novo cliente
     public function criar_cliente(){
-        //verifica se já existe sessão aberta
+        //verifica se já existe sessão(cliente) aberta
         if(Store::clienteLogado()){
             $this->index();
             return;
@@ -63,15 +64,43 @@ class Main{
         //verificar se a password está a coincidir (senha_1 == senha_2)
         if($_POST['text_senha_1'] !== $_POST['text_senha_2']){
             //as senhas são diferentes
-            $_SESSION['erro']='As senhas não são iguais!';
+            $_SESSION['erro_senha_rep']='As senhas não são iguais!';
             $this->novo_cliente();
             return;
         }
         //Verificar se já existe o email.
         $bd = new Database();
-        //para garantir que será: mb_strtolower(letras em minúsculo) e trim(remover espaços)
-        $parametros = [':email'=>mb_strtolower(trim($_POST['text_email']))];
+        //garantir que será: mb_strtolower(letras em minúsculo) e trim(remover espaços)
+        $parametros = [':e_mail'=>mb_strtolower(trim($_POST['text_email']))];
+        //fazer uma consulta para saber se o email já existe
+        $resultados = $bd->select("SELECT email FROM clientes WHERE email=:e_mail", $parametros);
+        //se o email já existe, retorna para parte de cadastro.
+        if(count($resultados) != 0){
+            $_SESSION['erro_email_exist']='Já existe um cliente com este Email!';
+            $this->novo_cliente();
+            return;
+        }
+        //cliente pronto para ser inserido na base de dados
+        $purl=Store::criarHash();
+        $parametros = [':email'=>mb_strtolower(trim($_POST['text_email'])),
+                    ':senha'=>password_hash(trim($_POST['text_senha_1']),PASSWORD_DEFAULT),
+                    ':nome_completo'=>trim($_POST['text_nome_completo']),
+                    ':endereco'=>trim($_POST['text_endereco']),
+                    ':cidade'=>trim($_POST['text_cidade']),
+                    ':telefone'=>trim($_POST['text_telefone']),
+                    ':purl'=>$purl,
+                    ':ativo'=>0 ];
+        $bd->insert("INSERT INTO clientes VALUES(0,:email,:senha,:nome_completo,:endereco,:cidade,:telefone,:purl,:ativo,NOW(),NOW(),NULL)", $parametros);
 
+        //criar um link purl para enviar o email
+        $link_purl="https://localhost/SAUDE/public/?a=confirmar_email&purl=$purl";
+
+/*
+3.Registro
+criar um PURL
+guardar um email com um PURL para o cliente
+apresentar uma messagem indicando que deve validar o email
+*/    
     }
     //============================================================================
     //Apresenta a pagina da CARRINHO

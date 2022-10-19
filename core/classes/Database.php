@@ -32,6 +32,9 @@ class Database{
     //CRUD
     //===============================================================
     public function select($sql, $parametros = null){
+        //se necessário for, trim(para remover espaços) de qualquer instrução do CRUD
+        $sql = trim($sql);
+
         //Verifica se é uma instrução SELECT
         //a função preg_match("verifica uma expressão regular")
         if(!preg_match("/^SELECT/i", $sql)){
@@ -39,8 +42,6 @@ class Database{
             //poderia fazer assim para não apresentar os detalhes do ERRO!
             // die('Base de dados - Não é uma instrução SELECT.');
         }
-
-
         //Liga ao DB
         $this->ligar();
 

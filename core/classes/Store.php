@@ -27,11 +27,10 @@ class Store{
         return isset($_SESSION['cliente']);
 
     }
+    //=================================================================================
+    public static function criarHash($num_caracteres=12){
+        //criar hashes
+        $chars='0123456789abcdefghijklmnopqrstuvxwyzabcdefghijklmnopqrstuvxwyzABCDEFGHIJKLMNOPQRSTUVXWYZABCDEFGHIJKLMNOPQRSTUVXWYZ';
+        return substr(str_shuffle($chars), 0, $num_caracteres);
+    }
 }
-
-/* 
-html_header.php
-nav_bar.php
-inicio.php
-html_footer.php
-*/
