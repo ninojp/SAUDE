@@ -5,7 +5,7 @@ use Exception;
 
 class Store{
     //=================================================================================
-    public static function Layout($estruturas, $dados = null){
+    public static function Layout($estruturas, $dados=null){
         //verifica se estruturas é um array
         if(!is_array($estruturas)){
             throw new Exception("coleção de estruturas inválida!");
@@ -20,7 +20,6 @@ class Store{
             include("../core/views/$estrutura.php");
         }
     }
-
     //=================================================================================
     public static function clienteLogado(){
         //verifica se existe um cliente com sessão(logado)
@@ -32,5 +31,10 @@ class Store{
         //criar hashes
         $chars='0123456789abcdefghijklmnopqrstuvxwyzabcdefghijklmnopqrstuvxwyzABCDEFGHIJKLMNOPQRSTUVXWYZABCDEFGHIJKLMNOPQRSTUVXWYZ';
         return substr(str_shuffle($chars), 0, $num_caracteres);
+    }
+    //=================================================================================
+    public static function redirect($rota=''){
+        //faz o redirecionamento para a url desejada(rota)
+        header("Location: ".BASE_URL."?a=$rota");
     }
 }
