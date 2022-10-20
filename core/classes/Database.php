@@ -5,7 +5,7 @@ use Exception;
 use PDO;
 use PDOException;
 
-class Database{
+class Database {
     //gestão de bases de dados
     private $ligacao;
     //===============================================================
@@ -73,6 +73,8 @@ class Database{
     }
     //===============================================================
     public function insert($sql, $parametros = null){
+        //se necessário for, trim(para remover espaços) de qualquer instrução do CRUD
+        $sql = trim($sql);
         //Verifica se é uma instrução do tipo INSERT
         if(!preg_match("/^INSERT/i", $sql)){
             throw new Exception('Base de dados - Não é uma instrução INSERT!');
@@ -102,6 +104,8 @@ class Database{
     }
     //===============================================================
     public function update($sql, $parametros = null){
+        //se necessário for, trim(para remover espaços) de qualquer instrução do CRUD
+        $sql = trim($sql);
         //Verifica se é uma instrução do tipo UPDATE
         if(!preg_match("/^UPDATE/i", $sql)){
             throw new Exception('Base de dados - Não é uma instrução UPDATE!');
@@ -128,6 +132,8 @@ class Database{
     }
     //===============================================================
     public function delete($sql, $parametros = null){
+        //se necessário for, trim(para remover espaços) de qualquer instrução do CRUD
+        $sql = trim($sql);
         //Verifica se é uma instrução do tipo DELETE
         if(!preg_match("/^DELETE/i", $sql)){
             throw new Exception('Base de dados - Não é uma instrução DELETE!');
@@ -156,6 +162,8 @@ class Database{
     //GENÉRICA - Verificar e executar as outras instruções ()
     //===============================================================
     public function statement($sql, $parametros = null){
+        //se necessário for, trim(para remover espaços) de qualquer instrução do CRUD
+        $sql = trim($sql);
         //Verifica se é uma instrução diferente das anteriores(CRUD)
         if(preg_match("/^(SELECT|INSERT|UPDATE|DELETE)/i", $sql)){
             throw new Exception('Base de dados - Instrução INVÁLIDA!');
@@ -191,7 +199,7 @@ Update - UPDATE
 Delete - DELETE
 define('MYSQL_SERVER', 'localhost');
 define('MYSQL_DATABASE', 'db_saude');
-define('MYSQL_USER', 'NinoJP');
-define('MYSQL_PASS', 'chNd@w40_(rWpyQC');
+define('MYSQL_USER', '');
+define('MYSQL_PASS', '');
 define('MYSQL_CHARSET', 'utf8');
 */

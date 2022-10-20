@@ -1,15 +1,9 @@
 <?php
-
 namespace core\classes;
-//eu que coloquei estes namespaces aqui
-// namespace vendor\PHPMailer\src\PHPMailer;
-// namespace vendor\PHPMailer\src\SMTP;
-// namespace vendor\PHPMailer\src\Exception;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
-// use vendor\phpmailer\src\Exception;
 
 class EnviarEmail{
 
@@ -20,7 +14,6 @@ class EnviarEmail{
     $link = BASE_URL.'?a=confirmar_email&purl='.$purl;
     
     $mail = new PHPMailer(true);
-
     try {
         //Opções do SERVIDOR
         //SMTP::DEBUG_SERVER, apresentar msg de dos erros, pode ser = 2, ou 0, para não exibir msg = DEBUG_OFF

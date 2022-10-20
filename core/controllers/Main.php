@@ -22,7 +22,6 @@ class Main{
             'layouts/html_footer'
         ]);
     }
-
     //============================================================================
     //Apresenta a pagina da LOJA
     public function loja(){
@@ -95,6 +94,34 @@ class Main{
         }
     }
     //============================================================================
+    public function confirmar_email(){
+        //verifica se já existe sessão(cliente) aberta
+        if(Store::clienteLogado()){
+            $this->index();
+            return;
+        }
+        //verificar se na query string tem um purl
+        if(!isset($_GET['purl'])){
+            $this->index();
+            return;
+        }
+        $purl = $_GET['purl'];
+        //verifica se o purl é valido
+        if(strlen($purl) != 12){
+            $this->index();
+            return;
+        }
+        $cliente = new Clientes();
+        
+        $resultado =  $cliente->validar_email($purl);
+        if($resultado){
+            echo'Conta validada com sucesso!';
+        }else{
+            echo'A Conta não foi validada!';
+        }
+
+    }
+    //============================================================================
     //Apresenta a pagina da CARRINHO
     public function carrinho(){
         Store::Layout([
@@ -106,7 +133,6 @@ class Main{
         ]);
     }
 }
-
 /* - VIEWS
 1. carreagr e tratar dados (calculos) (bases de dados)
 2. apresentar o layout (views)
