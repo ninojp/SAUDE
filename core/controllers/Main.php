@@ -7,6 +7,7 @@ use core\classes\Database;
 use core\classes\EnviarEmail;
 use core\classes\Store;
 use core\models\Clientes;
+use core\models\Produtos;
 
 class Main
 {
@@ -26,16 +27,24 @@ class Main
         ]);
     }
     //============================================================================
-    //Apresenta a pagina da LOJA
     public function loja()
     {
-        Store::Layout([
-            'layouts/html_header',
-            'layouts/header',
+        //buscar a lista de produtos disponiveis
+        $produtos = new Produtos();
+
+        //analisa que categoria é para mostrar
+        $c = 'todos';
+        if(isset($_GET['c'])){
+            $c = $_GET['c'];
+        }
+
+        $lista_produtos = $produtos->lista_produtos_disponiveis($c);
+        
+        //Apresenta a pagina(layout) da LOJA
+        Store::Layout([ 'layouts/html_header', 'layouts/header',
             'loja',
-            'layouts/footer',
-            'layouts/html_footer'
-        ]);
+            'layouts/footer', 'layouts/html_footer'],
+            ['produtos' => $lista_produtos]);
     }
     //============================================================================
     //Apresenta a pagina do novo_cliente
@@ -176,12 +185,45 @@ class Main
             Store::redirect('login');
             return;  
         }
-        echo'OK!';
-        /*
-1.validar o campos prenchidos
-2.confirmar as informações no BD
-3.Criar a sessão do cliente
-*/
+        //prepara os dados para o models
+        $usuario = trim(strtolower($_POST['text_usuario']));
+        $senha = trim($_POST['text_senha']);
+
+        //carrega o models e verifica se o login é valido
+        $cliente = new Clientes();
+        $resultado = $cliente->validar_login($usuario, $senha);
+
+        //analisa o resultado
+        if(is_bool($resultado)){
+            //login inválido
+            $_SESSION['erro'] = 'Login inválido';
+            Store::redirect('login');
+            return;
+        } else {
+            //login válido. Coloca os dados na sessão
+            $_SESSION['cliente'] = $resultado->id_cliente;
+            $_SESSION['usuario'] = $resultado->email;
+            $_SESSION['nome_cliente'] = $resultado->nome_completo;
+            
+            //redireciona para o início da nossa loja
+            Store::redirect();
+        }
+    }
+    //============================================================================
+    public function logout()
+    {
+        //remove as variáveis da sessão
+        unset($_SESSION['cliente']);
+        unset($_SESSION['usuario']);
+        unset($_SESSION['nome_cliente']);
+
+        //redireciona para o inicio da loja
+        Store::redirect();
+    }
+    //============================================================================
+    public function lista_produtos_disponiveis()
+    {
+
     }
 
     //============================================================================
@@ -197,7 +239,3 @@ class Main
         ]);
     }
 }
-/* - VIEWS
-1. carreagr e tratar dados (calculos) (bases de dados)
-2. apresentar o layout (views)
-*/

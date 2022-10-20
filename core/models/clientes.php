@@ -1,42 +1,48 @@
 <?php
+
 namespace core\models;
 
 use core\classes\Database;
 use core\classes\Store;
 
-class Clientes{
+class Clientes
+{
     //===================================================================================
-    public function verificar_email_existe($email){
+    public function verificar_email_existe($email)
+    {
         //verifica se já existe outra conta com o mesmo email
         $bd = new Database();
         //garantir que será: mb_strtolower(letras em minúsculo) e trim(remover espaços)
-        $parametros = [':e_mail'=>mb_strtolower(trim($email))];
+        $parametros = [':e_mail' => mb_strtolower(trim($email))];
         //fazer uma consulta para saber se o email já existe
         $resultados = $bd->select("SELECT email FROM clientes WHERE email=:e_mail", $parametros);
         //se o email já existe, retorna para parte de cadastro.
-        if(count($resultados) != 0){
-           return true; 
-        }else{
+        if (count($resultados) != 0) {
+            return true;
+        } else {
             return false;
         }
     }
     //===================================================================================
-    public function registrar_cliente(){
+    public function registrar_cliente()
+    {
         //registra um novo cliente na base de dados
-        $bd= new Database();
-        
+        $bd = new Database();
+
         //cria uma hash para o registro do cliente
-        $purl=Store::criarHash();
+        $purl = Store::criarHash();
 
         //parametros
-        $parametros = [':email'=>mb_strtolower(trim($_POST['text_email'])),
-                    ':senha'=>password_hash(trim($_POST['text_senha_1']),PASSWORD_DEFAULT),
-                    ':nome_completo'=>trim($_POST['text_nome_completo']),
-                    ':endereco'=>trim($_POST['text_endereco']),
-                    ':cidade'=>trim($_POST['text_cidade']),
-                    ':telefone'=>trim($_POST['text_telefone']),
-                    ':purl'=>$purl,
-                    ':ativo'=>0 ];
+        $parametros = [
+            ':email' => mb_strtolower(trim($_POST['text_email'])),
+            ':senha' => password_hash(trim($_POST['text_senha_1']), PASSWORD_DEFAULT),
+            ':nome_completo' => trim($_POST['text_nome_completo']),
+            ':endereco' => trim($_POST['text_endereco']),
+            ':cidade' => trim($_POST['text_cidade']),
+            ':telefone' => trim($_POST['text_telefone']),
+            ':purl' => $purl,
+            ':ativo' => 0
+        ];
 
         $bd->insert("INSERT INTO clientes VALUES(0,:email,:senha,:nome_completo,:endereco,:cidade,:telefone,:purl,:ativo,NOW(),NOW(),NULL)", $parametros);
 
@@ -44,8 +50,9 @@ class Clientes{
         return $purl;
     }
     //===================================================================================
-    public function validar_email($purl){
-        
+    public function validar_email($purl)
+    {
+
         //validar o email do novo cliente
         $bd = new Database();
         $parametros = [
@@ -54,16 +61,40 @@ class Clientes{
         $resultados = $bd->select("SELECT * FROM clientes WHERE purl=:purl", $parametros);
 
         //verifica se foi encontrado o cliente
-        if(count($resultados) != 1){
+        if (count($resultados) != 1) {
             return false;
         }
         //foi encontrado este cliente com o purl indicado 
         $id_cliente = $resultados[0]->id_cliente;
-        
+
         //atualizar os dados do cliente
-        $parametros = [':id_cliente'=>$id_cliente];
-        $bd->update("UPDATE clientes SET purl=NULL, activo=1, updated_at=NOW() WHERE id_cliente=:id_cliente",$parametros);
+        $parametros = [':id_cliente' => $id_cliente];
+        $bd->update("UPDATE clientes SET purl=NULL, activo=1, updated_at=NOW() WHERE id_cliente=:id_cliente", $parametros);
         return true;
     }
+    //===================================================================================
+    public function validar_login($usuario, $senha)
+    {
+        //verificar se o login é válido
+        $parametros = [':usuario' => $usuario];
 
+        $bd = new Database();
+        $resultado = $bd->select("SELECT * FROM clientes WHERE email=:usuario AND activo=1 AND deleted_at IS NULL", $parametros);
+
+        if (count($resultado) != 1) {
+            //não existe usuário
+            return false;
+        } else {
+            //temos usuário. Vamos ver a sua senha
+            $usuario = $resultado[0];
+            //verificar a senha
+            if(!password_verify($senha, $usuario->senha)){
+                //senha inválida
+                return false;
+            } else {
+                //login válido
+                return $usuario;
+            }
+        }
+    }
 }

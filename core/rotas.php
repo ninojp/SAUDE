@@ -3,12 +3,16 @@
 $rotas = [
     'inicio' => 'main@index',
     'loja' => 'main@loja',
+    //cliente
     'novo_cliente' => 'main@novo_cliente',
     'criar_cliente' => 'main@criar_cliente',
     'confirmar_email' => 'main@confirmar_email',
+    //login
     'login' => 'main@login',
     'login_submit' => 'main@login_submit',
-    'carrinho' => 'main@carrinho',
+    'logout' => 'main@logout',
+    //carrinho
+    'carrinho' => 'main@carrinho'
 ];
 
 //Define uma ação por default

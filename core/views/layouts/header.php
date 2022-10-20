@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-6 p-1">
             <a class="nav_link" href="?a=inicio">
-                <h3><?= APP_NAME ?></h3>
+                <h3 class="ps-4"><?= APP_NAME ?></h3>
             </a>
         </div>
         <div class="col-6 text-end p-3">
@@ -14,8 +14,9 @@
 
             <!-- verifica se existe um cliente na sessão ------------------------------->
             <?php if(Store::clienteLogado()): ?>
-                <a class="nav_link" href="?a=minha_conta">Minha Conta</a>
-                <a class="nav_link" href="?a=logout">Logout</a>
+                <!-- <a class="nav_link" href="?a=minha_conta"></a> -->
+                <i class="fas fa-user me-1"></i><?= $_SESSION['usuario'] ?>
+                <a class="nav_link" href="?a=logout"><i class="fa-solid fa-right-from-bracket"></i></a>
                 
             <?php else: ?>
                 <a class="nav_link" href="?a=login">Login</a>

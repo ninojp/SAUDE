@@ -17,6 +17,9 @@
     --gold: rgba(255,215,0,1);
     --vermelho: rgba(172,2,2,1);
 }
+/* *{
+    box-shadow: inset 0px 0px 1px rgba(255,0,0,0.5);
+} */
 .navegacao{
     background-color: var(--verdMc);
     color: var(--azuEsc);
@@ -33,4 +36,11 @@
 .nav_link:hover{
     text-decoration: underline;
     color: var(--br);
+}
+.espaco-fundo{
+    margin-bottom: 50px;
+}
+.box-produto{
+    border: 1px solid rgba(150, 150, 150, 0.5);
+    border-radius: 10px;
 }
