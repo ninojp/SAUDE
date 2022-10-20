@@ -88,7 +88,15 @@ class Main{
         
         $resultado = $email->enviar_email_confirmacao_novo_cliente($email_cliente, $purl);
         if($resultado){
-            echo 'Email enviado com Sucesso!';
+            //Apresenta o layout para cliente criado com sucesso
+            Store::Layout([
+                'layouts/html_header',
+                'layouts/header',
+                'criar_cliente_sucesso',
+                'layouts/footer',
+                'layouts/html_footer'
+            ]);
+            return;
         }else{
             echo 'Aconteceu um ERRO!';
         }
@@ -112,10 +120,10 @@ class Main{
             return;
         }
         $cliente = new Clientes();
-        
         $resultado =  $cliente->validar_email($purl);
         if($resultado){
             echo'Conta validada com sucesso!';
+
         }else{
             echo'A Conta não foi validada!';
         }

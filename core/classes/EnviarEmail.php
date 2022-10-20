@@ -18,6 +18,7 @@ class EnviarEmail{
         //Opções do SERVIDOR
         //SMTP::DEBUG_SERVER, apresentar msg de dos erros, pode ser = 2, ou 0, para não exibir msg = DEBUG_OFF
         $mail->SMTPDebug = SMTP::DEBUG_OFF;
+        $mail->CharSet = 'UTF-8';
         $mail->isSMTP(); //Send using SMTP
         $mail->Host = MAIL_HOST; //Set the SMTP server to send through
         $mail->SMTPAuth = true;  //Enable SMTP authentication
@@ -44,7 +45,7 @@ class EnviarEmail{
         $mail->isHTML(true);                                  //Set email format to HTML
         $mail->Subject = APP_NAME.' - Confirmação de Email.';
         $html = '<h3>Seja bem-vindo(a) à nossa loja '.APP_NAME.'.</h3>';
-        $html .= '<p>Para concluir o cadastro em nosso loja é necessário confirmar o Email.</p>';
+        $html .= '<p>Para concluir o cadastro em nossa loja é necessário confirmar o Email.</p>';
         $html .= '<p>Para confirmar o seu Email, clique no link abaixo:</p>';
         $html .= '<p><a href="'.$link.'">Confirmar Email</a></p>';
         $html .= '<p><i><small>'.APP_NAME.'</small></i></p>';
