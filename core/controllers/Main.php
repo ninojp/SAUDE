@@ -2,7 +2,7 @@
 
 namespace core\controllers;
 
-//indicação dos NAMESPACEs das minhas classes do CORE
+//indicação dos NAMESPACEs das minhas classes do CORE:
 use core\classes\Database;
 use core\classes\EnviarEmail;
 use core\classes\Store;
@@ -40,7 +40,7 @@ class Main
         //buscar informações à BD,(lista de produtos e lista de categorias)
         $lista_produtos = $produtos->lista_produtos_disponiveis($c);
         $lista_categorias = $produtos->listar_categorias();
-        
+
         $dados = ['produtos' => $lista_produtos, 'categorias' => $lista_categorias];
         
         //Apresenta a pagina(layout) da LOJA
@@ -221,23 +221,5 @@ class Main
 
         //redireciona para o inicio da loja
         Store::redirect();
-    }
-    //============================================================================
-    public function lista_produtos_disponiveis()
-    {
-
-    }
-
-    //============================================================================
-    //Apresenta a pagina da CARRINHO
-    public function carrinho()
-    {
-        Store::Layout([
-            'layouts/html_header',
-            'layouts/header',
-            'carrinho',
-            'layouts/footer',
-            'layouts/html_footer'
-        ]);
     }
 }

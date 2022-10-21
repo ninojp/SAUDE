@@ -29,7 +29,7 @@
                 <h3><?= $produto->nome_produto ?></h3>
                 <h2><?= "R$ ". preg_replace("/\./", ",", $produto->preco) ?></h2>
                 <p><small><?= $produto->descricao ?></small></p>
-                <button class="btn btn-sm btn-info">Inserir ao Carrinho<i class="fa-solid fa-cart-shopping ms-2"></i></button>
+                <button class="btn btn-sm btn-info" onclick="adicionar_carrinho(<?= $produto->id_produto ?>)">Inserir ao Carrinho<i class="fa-solid fa-cart-shopping ms-2"></i></button>
             </div>
         </div>
         <?php endforeach; ?>

@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="assets/css/all.min.css">
     <!-- inserção do Meu CSS local ----------------------------------------->
     <link rel="stylesheet" href="assets/css/app.css">
+    <!-- Meu FAVICON deste site -->
+    <link rel="shortcut icon" href="assets/imgs/favicon.ico" type="image/x-icon">
 </head>
 <body>
   
