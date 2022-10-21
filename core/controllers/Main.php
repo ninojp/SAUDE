@@ -37,14 +37,16 @@ class Main
         if(isset($_GET['c'])){
             $c = $_GET['c'];
         }
-
+        //buscar informações à BD,(lista de produtos e lista de categorias)
         $lista_produtos = $produtos->lista_produtos_disponiveis($c);
+        $lista_categorias = $produtos->listar_categorias();
+        
+        $dados = ['produtos' => $lista_produtos, 'categorias' => $lista_categorias];
         
         //Apresenta a pagina(layout) da LOJA
         Store::Layout([ 'layouts/html_header', 'layouts/header',
             'loja',
-            'layouts/footer', 'layouts/html_footer'],
-            ['produtos' => $lista_produtos]);
+            'layouts/footer', 'layouts/html_footer'], $dados);
     }
     //============================================================================
     //Apresenta a pagina do novo_cliente

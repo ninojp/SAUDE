@@ -1,21 +1,24 @@
 <?php
+
 namespace core\classes;
 
 use Exception;
 use PDO;
 use PDOException;
 
-class Database {
+class Database
+{
     //gestão de bases de dados
     private $ligacao;
     //===============================================================
-    private function ligar(){
+    private function ligar()
+    {
         //Ligar à base de dados
         $this->ligacao = new PDO(
-            'mysql:'.
-            'host='.MYSQL_SERVER.';'.
-            'dbname='.MYSQL_DATABASE.';'.
-            'charset='.MYSQL_CHARSET,
+            'mysql:' .
+                'host=' . MYSQL_SERVER . ';' .
+                'dbname=' . MYSQL_DATABASE . ';' .
+                'charset=' . MYSQL_CHARSET,
             MYSQL_USER,
             MYSQL_PASS,
             array(PDO::ATTR_PERSISTENT => true)
@@ -24,20 +27,22 @@ class Database {
         $this->ligacao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
     }
     //===============================================================
-    private function desligar(){
+    private function desligar()
+    {
         //Desligar-se da base de dados
         $this->ligacao = null;
     }
     //===============================================================
     //CRUD
     //===============================================================
-    public function select($sql, $parametros = null){
+    public function select($sql, $parametros = null)
+    {
         //se necessário for, trim(para remover espaços) de qualquer instrução do CRUD
         $sql = trim($sql);
 
         //Verifica se é uma instrução SELECT
         //a função preg_match("verifica uma expressão regular")
-        if(!preg_match("/^SELECT/i", $sql)){
+        if (!preg_match("/^SELECT/i", $sql)) {
             throw new Exception('Base de dados - Não é uma instrução SELECT.');
             //poderia fazer assim para não apresentar os detalhes do ERRO!
             // die('Base de dados - Não é uma instrução SELECT.');
@@ -50,7 +55,7 @@ class Database {
         //Cumunica
         try {
             //comunicação com o db
-            if (!empty($parametros)){
+            if (!empty($parametros)) {
                 $executar = $this->ligacao->prepare($sql);
                 $executar->execute($parametros);
                 $resultados = $executar->fetchAll(PDO::FETCH_CLASS);
@@ -59,7 +64,6 @@ class Database {
                 $executar->execute();
                 $resultados = $executar->fetchAll(PDO::FETCH_CLASS);
             }
-
         } catch (PDOException $e) {
             //caso exista erro
             return false;
@@ -72,11 +76,12 @@ class Database {
         return $resultados;
     }
     //===============================================================
-    public function insert($sql, $parametros = null){
+    public function insert($sql, $parametros = null)
+    {
         //se necessário for, trim(para remover espaços) de qualquer instrução do CRUD
         $sql = trim($sql);
         //Verifica se é uma instrução do tipo INSERT
-        if(!preg_match("/^INSERT/i", $sql)){
+        if (!preg_match("/^INSERT/i", $sql)) {
             throw new Exception('Base de dados - Não é uma instrução INSERT!');
         }
 
@@ -86,14 +91,13 @@ class Database {
         //Cumunica
         try {
             //comunicação com o db
-            if (!empty($parametros)){
+            if (!empty($parametros)) {
                 $executar = $this->ligacao->prepare($sql);
                 $executar->execute($parametros);
             } else {
                 $executar = $this->ligacao->prepare($sql);
                 $executar->execute();
             }
-
         } catch (PDOException $e) {
             //caso exista erro
             return false;
@@ -103,11 +107,12 @@ class Database {
         $this->desligar();
     }
     //===============================================================
-    public function update($sql, $parametros = null){
+    public function update($sql, $parametros = null)
+    {
         //se necessário for, trim(para remover espaços) de qualquer instrução do CRUD
         $sql = trim($sql);
         //Verifica se é uma instrução do tipo UPDATE
-        if(!preg_match("/^UPDATE/i", $sql)){
+        if (!preg_match("/^UPDATE/i", $sql)) {
             throw new Exception('Base de dados - Não é uma instrução UPDATE!');
         }
         //Ligar
@@ -115,14 +120,13 @@ class Database {
         //Cumunica
         try {
             //comunicação com o db
-            if (!empty($parametros)){
+            if (!empty($parametros)) {
                 $executar = $this->ligacao->prepare($sql);
                 $executar->execute($parametros);
             } else {
                 $executar = $this->ligacao->prepare($sql);
                 $executar->execute();
             }
-
         } catch (PDOException $e) {
             //caso exista erro
             return false;
@@ -131,11 +135,12 @@ class Database {
         $this->desligar();
     }
     //===============================================================
-    public function delete($sql, $parametros = null){
+    public function delete($sql, $parametros = null)
+    {
         //se necessário for, trim(para remover espaços) de qualquer instrução do CRUD
         $sql = trim($sql);
         //Verifica se é uma instrução do tipo DELETE
-        if(!preg_match("/^DELETE/i", $sql)){
+        if (!preg_match("/^DELETE/i", $sql)) {
             throw new Exception('Base de dados - Não é uma instrução DELETE!');
         }
         //Ligar
@@ -143,14 +148,13 @@ class Database {
         //Cumunica
         try {
             //comunicação com o db
-            if (!empty($parametros)){
+            if (!empty($parametros)) {
                 $executar = $this->ligacao->prepare($sql);
                 $executar->execute($parametros);
             } else {
                 $executar = $this->ligacao->prepare($sql);
                 $executar->execute();
             }
-
         } catch (PDOException $e) {
             //caso exista erro
             return false;
@@ -161,11 +165,12 @@ class Database {
     //===============================================================
     //GENÉRICA - Verificar e executar as outras instruções ()
     //===============================================================
-    public function statement($sql, $parametros = null){
+    public function statement($sql, $parametros = null)
+    {
         //se necessário for, trim(para remover espaços) de qualquer instrução do CRUD
         $sql = trim($sql);
         //Verifica se é uma instrução diferente das anteriores(CRUD)
-        if(preg_match("/^(SELECT|INSERT|UPDATE|DELETE)/i", $sql)){
+        if (preg_match("/^(SELECT|INSERT|UPDATE|DELETE)/i", $sql)) {
             throw new Exception('Base de dados - Instrução INVÁLIDA!');
         }
         //Ligar
@@ -173,14 +178,13 @@ class Database {
         //Cumunica
         try {
             //comunicação com o db
-            if (!empty($parametros)){
+            if (!empty($parametros)) {
                 $executar = $this->ligacao->prepare($sql);
                 $executar->execute($parametros);
             } else {
                 $executar = $this->ligacao->prepare($sql);
                 $executar->execute();
             }
-
         } catch (PDOException $e) {
             //caso exista erro
             return false;
@@ -188,7 +192,6 @@ class Database {
         //Desliga da db
         $this->desligar();
     }
-
 }
 //==========================================================================================
 /* 1.Ligar - 2.Comunicar - 3.Fechar

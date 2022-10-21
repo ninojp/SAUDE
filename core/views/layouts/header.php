@@ -9,22 +9,22 @@
             </a>
         </div>
         <div class="col-6 text-end p-3">
-            <a class="nav_link" href="?a=inicio">Início</a>
-            <a class="nav_link" href="?a=loja">Loja</a>
+            <a class="nav_link btn btn-sm btn-primary" href="?a=inicio">Início</a>
+            <a class="nav_link btn btn-sm btn-primary" href="?a=loja">Loja</a>
 
             <!-- verifica se existe um cliente na sessão ------------------------------->
             <?php if(Store::clienteLogado()): ?>
                 <!-- <a class="nav_link" href="?a=minha_conta"></a> -->
                 <i class="fas fa-user me-1"></i><?= $_SESSION['usuario'] ?>
-                <a class="nav_link" href="?a=logout"><i class="fa-solid fa-right-from-bracket"></i></a>
+                <a class="nav_link btn btn-sm btn-primary" href="?a=logout"><i class="fa-solid fa-right-from-bracket"></i></a>
                 
             <?php else: ?>
-                <a class="nav_link" href="?a=login">Login</a>
-                <a class="nav_link" href="?a=novo_cliente">Criar Conta</a>
+                <a class="nav_link btn btn-sm btn-primary" href="?a=login">Login</a>
+                <a class="nav_link btn btn-sm btn-primary" href="?a=novo_cliente">Criar Conta</a>
 
             <?php endif; ?>
 
-            <a class="nav_link" href="?a=carrinho"><i class="fa-solid fa-cart-shopping"></i></a>
+            <a class="nav_link btn btn-sm btn-primary" href="?a=carrinho"><i class="fa-solid fa-cart-shopping"></i></a>
             <span class="badge bg-warning">0</span>
         </div>
     </div>
