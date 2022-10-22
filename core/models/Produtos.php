@@ -39,4 +39,21 @@ class Produtos
        }
        return $categorias;
     }
+    //==================================================================================
+    public function verificar_stock_produto($id_produto)
+    {
+        $bd = new Database();
+        $parametros = [':id_produto' => $id_produto];
+        $resultados = $bd->select("SELECT * FROM produtos WHERE id_produto=:id_produto AND visivel=1 AND stock > 0", $parametros);
+        return count($resultados) != 0 ? true : false;
+    }
+    //==================================================================================
+    public function buscar_produtos_por_ids($ids)
+    {
+        $bd = new Database();
+        
+        // $parametros = [':ids' => $ids];
+
+        return $bd->select("SELECT * FROM produtos WHERE id_produto IN ($ids)");
+    }
 }
