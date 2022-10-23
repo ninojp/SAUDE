@@ -9,3 +9,12 @@ function adicionar_carrinho(id_produto) {
          document.getElementById('carrinho').innerText = total_produtos;
       });
 }
+//============================================================================
+function limpar_carrinho(){
+   var e = document.getElementById("confirmar_limpar_carrinho");
+   e.style.display = "inline";
+}
+function limpar_carrinho_off(){
+   var e = document.getElementById("confirmar_limpar_carrinho");
+   e.style.display = "none";
+}

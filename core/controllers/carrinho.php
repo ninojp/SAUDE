@@ -56,6 +56,21 @@ class Carrinho
         echo $total_produtos;
     }
     //============================================================================
+    public function remover_produto_carrinho()
+    {   
+        // vai buscar o id_produto na query string
+        $id_produto = $_GET['id_produto'];
+        //buscar o carrinho à sessão
+        $carrinho = $_SESSION['carrinho'];
+        //remover o produto do carrinho
+        unset($carrinho[$id_produto]);
+        //utualizar o carrinho na sessão
+        $_SESSION['carrinho'] = $carrinho;
+        //apresentar novamente a pagina do carrinho
+        $this->carrinho();
+        
+    }
+    //============================================================================
     public function limpar_carrinho()
     {
         //limpa o carrinho de todos os produtos
@@ -79,11 +94,36 @@ class Carrinho
             $produtos = new Produtos();
             $resultados = $produtos->buscar_produtos_por_ids($ids);
 
-            // Store::printData($ids);
-            Store::printData($resultados);
-            die();
+            $dados_tmp = [];
+            foreach($_SESSION['carrinho'] as $id_produto => $quantidade_carrinho){
+                //id, imagem, titulo, quantidade, preço, do produto
+                foreach($resultados as $produto){
+                    if($produto->id_produto == $id_produto){
+                    $id_produto = $produto->id_produto;
+                    $imagem = $produto->imagem;
+                    $titulo = $produto->nome_produto;
+                    $quantidade = $quantidade_carrinho;
+                    $preco = $produto->preco * $quantidade;
 
-            $dados = ['carrinho' => 1];
+                    //colocar o produto na coleção
+                    array_push($dados_tmp,[
+                        'id_produto'=>$id_produto,
+                        'imagem'=>$imagem,
+                        'titulo'=>$titulo,
+                        'quantidade'=>$quantidade,
+                        'preco'=>$preco]);
+                        break;
+                    }
+                }
+            }
+            //calcular o total
+            $total_da_encomenda = 0;
+            foreach($dados_tmp as $item){
+                $total_da_encomenda += $item['preco'];
+            }
+
+            array_push($dados_tmp, $total_da_encomenda);
+            $dados = ['carrinho'=>$dados_tmp];
         }
 
         //Apresenta a pagina da CARRINHO
@@ -94,6 +134,10 @@ class Carrinho
     }
 }
 /* passos a serem feitos
+fazer um ciclo por produto no carrinho
+ - identificar o id e usar os dados da bd para criar 
+    uma coleção de dados para a do carrinho
+
 não existe carrinho
 carrinho vazio (link para voltar a loja)
 
@@ -101,9 +145,9 @@ id buscar à bd os dados dos produtos que existem no carrinho
 criar um ciclo que constroi a estrutura dos dados para o carrinho
 
 existe carrinho
-image|Designação| quantidade| preço (x)
-image|Designação| quantidade| preço (x)
-image|Designação| quantidade| preço (x)
+imagem | titulo | quantidade | preço | (x)
+imagem | titulo | quantidade | preço | (x)
+imagem | titulo | quantidade | preço | (x)
                     total   | Sum()
 
 */

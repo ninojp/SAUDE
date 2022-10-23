@@ -13,6 +13,7 @@ $rotas = [
     'logout' => 'main@logout',
     //carrinho
     'adicionar_carrinho' => 'carrinho@adicionar_carrinho',
+    'remover_produto_carrinho' => 'carrinho@remover_produto_carrinho',
     'limpar_carrinho' => 'carrinho@limpar_carrinho',
     'carrinho' => 'carrinho@carrinho'
 ];
