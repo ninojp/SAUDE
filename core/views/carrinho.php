@@ -67,7 +67,7 @@
                         <a href="?a=loja"><button class="btn btn-sm btn-outline-success mb-3">Continuar a compra</button></a>
                     </div>
                     <div class="col-3 text-center">
-                        <a href=""><button class="btn btn-sm btn-success">Finalizar a compra</button></a>
+                        <a href="?a=finalizar_encomenda"><button class="btn btn-sm btn-success">Finalizar a compra</button></a>
                     </div>
                 </div>
             </div>

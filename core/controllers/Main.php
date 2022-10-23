@@ -207,8 +207,16 @@ class Main
             $_SESSION['usuario'] = $resultado->email;
             $_SESSION['nome_cliente'] = $resultado->nome_completo;
             
-            //redireciona para o início da nossa loja
-            Store::redirect();
+            //redirecionar para o local correto
+            if(isset($_SESSION['tmp_carrinho'])){
+                //remove a variável temporária da sessão
+                unset($_SESSION['tmp_carrinho']);
+                //direciona para o resumo da encomenda
+                Store::redirect('finalizar_encomenda_resumo');
+            } else {
+                //redireciona para a loja
+                Store::redirect();
+            }
         }
     }
     //============================================================================

@@ -97,4 +97,13 @@ class Clientes
             }
         }
     }
+    //===================================================================================
+    public function buscar_dados_cliente($id_cliente)
+    {
+        $parametros = ['id_cliente' => $id_cliente];
+
+        $bd = new Database();
+        $resultados = $bd->select("SELECT email, nome_completo, endereco, cidade, telefone FROM clientes WHERE id_cliente=:id_cliente", $parametros);
+        return $resultados[0];
+    }
 }

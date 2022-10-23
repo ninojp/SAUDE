@@ -132,8 +132,92 @@ class Carrinho
             'carrinho',
             'layouts/footer', 'layouts/html_footer'], $dados);
     }
+    //============================================================================
+    public function finalizar_encomenda()
+    {
+        // verifica se existe cliente logado
+        if(!isset($_SESSION['cliente'])){
+            //coloca na sessão um referrer temporário
+            $_SESSION['tmp_carrinho'] = true;
+            //redirecionar para o quadro de login
+            Store::redirect('login');
+        } else {
+            Store::redirect('finalizar_encomenda_resumo');
+        }
+    }
+    //============================================================================
+    public function finalizar_encomenda_resumo()
+    {
+        //verifica se existe cliente logado
+        if(!isset($_SESSION['cliente'])){
+            Store::redirect('inicio');
+        }
+        //-------------------------------------------------------------------------
+        //informações do carrinho
+        $ids = [];
+        foreach($_SESSION['carrinho'] as $id_produto => $quantidade){
+            array_push($ids, $id_produto);
+        }
+        $ids = implode(",", $ids);
+        $produtos = new Produtos();
+        $resultados = $produtos->buscar_produtos_por_ids($ids);
+
+        $dados_tmp = [];
+        foreach($_SESSION['carrinho'] as $id_produto => $quantidade_carrinho){
+            //id, imagem, titulo, quantidade, preço, do produto
+            foreach($resultados as $produto){
+                if($produto->id_produto == $id_produto){
+                $id_produto = $produto->id_produto;
+                $imagem = $produto->imagem;
+                $titulo = $produto->nome_produto;
+                $quantidade = $quantidade_carrinho;
+                $preco = $produto->preco * $quantidade;
+
+                //colocar o produto na coleção
+                array_push($dados_tmp,[
+                    'id_produto'=>$id_produto,
+                    'imagem'=>$imagem,
+                    'titulo'=>$titulo,
+                    'quantidade'=>$quantidade,
+                    'preco'=>$preco]);
+                    break;
+                }
+            }
+        }
+        //calcular o total
+        $total_da_encomenda = 0;
+        foreach($dados_tmp as $item){
+            $total_da_encomenda += $item['preco'];
+        }
+        array_push($dados_tmp, $total_da_encomenda);
+        
+        //preparar os dados da view
+        $dados = [];
+        $dados['carrinho'] = $dados_tmp;
+        //-------------------------------------------------------------------------
+        //buscar as informações do cliente
+        $cliente = new Clientes();
+        $dados_cliente = $cliente->buscar_dados_cliente($_SESSION['cliente']);
+        $dados['cliente'] = $dados_cliente;
+        
+        //-------------------------------------------------------------------------
+        //Apresenta a pagina da CARRINHO
+        Store::Layout([
+            'layouts/html_header', 'layouts/header',
+            'encomenda_resumo',
+            'layouts/footer', 'layouts/html_footer'], $dados);
+    }
 }
 /* passos a serem feitos
+verificar se existe cliente logado
+    não existe?
+    - colocar um "referrer" na sessão
+    - abrir o quadro de login
+    - após login com sucesso, regressar à loja
+    - remover o referrer da sessão
+    Existe?
+    - passo 2 (confirmar)
+
 fazer um ciclo por produto no carrinho
  - identificar o id e usar os dados da bd para criar 
     uma coleção de dados para a do carrinho

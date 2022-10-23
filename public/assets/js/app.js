@@ -18,3 +18,15 @@ function limpar_carrinho_off(){
    var e = document.getElementById("confirmar_limpar_carrinho");
    e.style.display = "none";
 }
+//============================================================================
+function usar_endereco_alternativo(){
+   //mostar ou esconder o endereço alternativo
+   var e = document.getElementById('check_endereco_alternativo');
+   if(e.checked == true){
+      //mostra o quadro para definir o endereço alternativo
+      document.getElementById('endereco_alternativo').style.display='block';
+   } else {
+      //Esconde o quadro para definir o endereço alternativo
+      document.getElementById('endereco_alternativo').style.display='none';
+   }
+}
