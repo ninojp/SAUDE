@@ -49,29 +49,47 @@
         <div class="col-4  mt-5 p-5 text-start">
             <h4 class="text-center">Dados do cliente</h4>
             <hr>
-            <strong>Email:</strong> <?= $cliente->email ?><br>
-            <strong>Nome:</strong>  <?= $cliente->nome_completo ?>
-            <div class="form-check m-0 p-0">    
-                <strong>Endereço:</strong> <?= $cliente->endereco ?></strong><br>
-                <input class="form-check-input ms-3" onchange="usar_endereco_alternativo()" type="checkbox" name="check_endereco_alternativo" id="check_endereco_alternativo">
-                <label class="form-check-label ms-2" for="check_endereco_alternativo">Definir um endereço diferente</label>
-            </div>
-            <div id="endereco_alternativo" class="" style="display:none;">
-            endereco_alternativo
-            </div>
+            <strong>Nome:</strong>  <?= $cliente->nome_completo ?><br>
+            <strong>Endereço:</strong> <?= $cliente->endereco ?></strong><br>
             <strong>Cidade:</strong> <?= $cliente->cidade ?><br>
+            <strong>Email:</strong> <?= $cliente->email ?><br>
             <strong>Telefone:</strong> <?= $cliente->telefone ?>
+            <div class="form-check m-0 p-0">    
+                <input class="form-check-input ms-3" onchange="usar_endereco_alternativo()" type="checkbox" name="check_endereco_alternativo" id="check_endereco_alternativo">
+                <label class="form-check-label ms-2" for="check_endereco_alternativo">Redefinir dados do cliente</label>
+            </div>
+            <!-- endereço alternativo ------------------------------------------------------>
+            <div id="endereco_alternativo" class="" style="display:none;">
+            	<div class="mb-3">
+                    <label class="form-label">Novo Endereço:</label>
+                    <input class="form-control" type="text" id="text_endereco_alternativo">
+                </div> 
+            <!-- Cidade alternativa ------------------------------------------------------>
+            	<div class="mb-2">
+                    <label class="form-label">Nova Cidade:</label>
+                    <input class="form-control" type="text" id="text_cidade_alternativo">
+                </div> 
+            <!-- Telefone alternativo ------------------------------------------------------>
+            	<div class="mb-2">
+                    <label class="form-label">Novo Telefone:</label>
+                    <input class="form-control" type="text" id="text_telefone_alternativo">
+                </div> 
+            <!-- Email alternativo ------------------------------------------------------>
+            	<div class="mb-2">
+                    <label class="form-label">Novo Email:</label>
+                    <input class="form-control" type="email" id="text_email_alternativo">
+                </div>
+            </div> 
         </div>
-
-        <div class="row mb-5 p-3">
+        <div class="row mb-5 p-2">
             <div class="col-4 ps-5">
-                <button class="btn btn-sm btn-outline-danger">Cancelar a Compra</button>
+                <a class="btn btn-sm btn-outline-danger" href="?a=carrinho">Cancelar a Compra</a>
             </div>
             <div class="col-4 text-center">
-                <a href="?a=loja"><button class="btn btn-sm btn-outline-success mb-3">Continuar a compra</button></a>
+                <a class="btn btn-sm btn-outline-success mb-3" href="?a=loja">Continuar a compra</a>
             </div>
             <div class="col-4 text-center">
-                <a href="?a=finalizar_encomenda"><button class="btn btn-sm btn-success">Escolher o metodo de pagamento</button></a>
+                <a href="?a=escolher_metodo_pagamento" onclick="endereco_alternativo()"><button class="btn btn-sm btn-success">Escolher o metodo de pagamento</button></a>
             </div>
         </div>
 

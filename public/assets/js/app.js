@@ -30,3 +30,21 @@ function usar_endereco_alternativo(){
       document.getElementById('endereco_alternativo').style.display='none';
    }
 }
+//============================================================================
+function endereco_alternativo(){
+   
+  axios({
+   method: 'post',
+   url: '?a=endereco_alternativo',
+   data: {
+      text_endereco: document.getElementById('text_endereco_alternativo').value,
+      text_cidade: document.getElementById('text_cidade_alternativo').value,
+      text_telefone: document.getElementById('text_telefone_alternativo').value,
+      text_email: document.getElementById('text_email_alternativo').value,
+   }
+  });
+  /*vai buscar os dados do input
+   vai enviar por url via post por axios para um método da controlador
+   método do controlador vai receber os dados e colocar na sessão
+   */
+}

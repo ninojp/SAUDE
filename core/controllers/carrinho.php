@@ -207,6 +207,30 @@ class Carrinho
             'encomenda_resumo',
             'layouts/footer', 'layouts/html_footer'], $dados);
     }
+    //============================================================================
+    public function endereco_alternativo()
+    {
+        //receber os dados via AJAX(axios)
+        $post = json_decode(file_get_contents('php://input'), true);
+        //adiciona ou altera na sessão a variável(array) dados_alternativos
+        $_SESSION['dados_alternativos'] = [
+            'endereco' => $post['text_endereco'],
+            'cidade' => $post['text_cidade'],
+            'telefone' => $post['text_telefone'],
+            'email' => $post['text_email'],
+        ];
+    }
+    //============================================================================
+    public function escolher_metodo_pagamento()
+    {
+        echo 'Escolher método de pagamento';
+        // $_SESSION['dados_alternativos'] = ['endereco'
+        // 'cidade'
+        // 'email'
+        // 'telefone'];
+
+        Store::printData($_SESSION);
+    }
 }
 /* passos a serem feitos
 verificar se existe cliente logado
