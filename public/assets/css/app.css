@@ -21,11 +21,11 @@
     box-shadow: inset 0px 0px 1px rgba(255,0,0,0.5);
 } */
 .navegacao{
-    background-color: var(--verdMc);
+    background-color: var(--verdC);
     color: var(--azuEsc);
 }
 .rodape{
-    background-color: var(--verdMc);
+    background-color: var(--verdC);
     color: var(--azuEsc);
 }
 .nav_link{
@@ -36,6 +36,14 @@
 .nav_link:hover{
     text-decoration: underline;
     color: var(--br);
+}
+.div_titulo{
+    color: var(--azuEsc);
+    padding: 10px 0px 0px 0px;
+}
+.div_titulo a{
+    color: var(--azuEsc);
+    text-decoration: none;
 }
 .espaco-fundo{
     margin-bottom: 50px;

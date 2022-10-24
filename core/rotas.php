@@ -19,7 +19,7 @@ $rotas = [
     'finalizar_encomenda' => 'carrinho@finalizar_encomenda',
     'finalizar_encomenda_resumo' => 'carrinho@finalizar_encomenda_resumo',
     'endereco_alternativo' => 'carrinho@endereco_alternativo',
-    'escolher_metodo_pagamento' => 'carrinho@escolher_metodo_pagamento',
+    'confirmar_encomenda' => 'carrinho@confirmar_encomenda',
 ];
 
 //Define uma ação por default

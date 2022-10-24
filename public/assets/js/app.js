@@ -40,7 +40,6 @@ function endereco_alternativo(){
       text_endereco: document.getElementById('text_endereco_alternativo').value,
       text_cidade: document.getElementById('text_cidade_alternativo').value,
       text_telefone: document.getElementById('text_telefone_alternativo').value,
-      text_email: document.getElementById('text_email_alternativo').value,
    }
   });
   /*vai buscar os dados do input

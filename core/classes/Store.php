@@ -37,6 +37,16 @@ class Store
         return substr(str_shuffle($chars), 0, $num_caracteres);
     }
     //=================================================================================
+    public static function gerarCodigoEncomenda()
+    {
+        //Gerar um código para a encomenda - A Z / 100000 999999
+        $codigo = "";
+        $chars2 = 'ABCDEFGHIJKLMNOPQRSTUVXWYZABCDEFGHIJKLMNOPQRSTUVXWYZABCDEFGHIJKLMNOPQRSTUVXWYZ';
+        $codigo .= substr(str_shuffle($chars2),0,2);
+        $codigo .= rand(100000,999999);
+        return $codigo;
+    }
+    //=================================================================================
     public static function redirect($rota = '')
     {
         //faz o redirecionamento para a url desejada(rota)

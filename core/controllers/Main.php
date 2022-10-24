@@ -100,10 +100,10 @@ class Main
         $email_cliente = mb_strtolower(trim($_POST['text_email']));
         $purl = $cliente->registrar_cliente();
 
-        //envio do email para o cliente
+        //envio do email de confirmação para o novo cliente
         $email = new EnviarEmail();
-
         $resultado = $email->enviar_email_confirmacao_novo_cliente($email_cliente, $purl);
+        //se o email foi confirmado
         if ($resultado) {
             //Apresenta o layout para cliente criado com sucesso
             Store::Layout([

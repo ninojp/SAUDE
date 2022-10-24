@@ -6,13 +6,12 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 class EnviarEmail{
-
-    public function enviar_email_confirmacao_novo_cliente($email_cliente, $purl){
-    //envia um email de confirmção para um novo cliente
-
+    //=================================================================================
+    public function enviar_email_confirmacao_novo_cliente($email_cliente, $purl)
+    {
     //constroi o purl (link para validação do email)
     $link = BASE_URL.'?a=confirmar_email&purl='.$purl;
-    
+    //envia um email de confirmção para um novo cliente
     $mail = new PHPMailer(true);
     try {
         //Opções do SERVIDOR
@@ -52,6 +51,59 @@ class EnviarEmail{
         $mail->Body = $html;
         // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        return false;
+    }
+    }
+    //=================================================================================
+    public function enviar_email_confirmacao_encomenda($email_cliente, $dados_encomenda)
+    {
+    //envia um email de confirmção de encomenda realizada com sucesso
+    $mail = new PHPMailer(true);
+    try {
+        //Opções do SERVIDOR
+        $mail->SMTPDebug = SMTP::DEBUG_OFF;
+        $mail->CharSet = 'UTF-8';
+        $mail->isSMTP(); //Send using SMTP
+        $mail->Host = MAIL_HOST; //Set the SMTP server to send through
+        $mail->SMTPAuth = true;  //Enable SMTP authentication
+        $mail->Username   = MAIL_FROM; //SMTP username
+        $mail->Password   = MAIL_PASS; //SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;            
+        $mail->Port = MAIL_PORT;  
+
+        //Emissor e receptor
+        $mail->setFrom(MAIL_FROM, APP_NAME);
+        $mail->addAddress($email_cliente);  
+
+        //Conteudo da menssagem
+        $mail->isHTML(true);
+        $mail->Subject = APP_NAME.' - Confirmação da Encomenda - '.$dados_encomenda['dados_pagamento']['codigo_encomenda'];
+        $html = '<h3>Este email serve para confirmar a sua encomenda.</h3>';
+        $html .= '<hr>';
+        $html .= '<p>Dados da encomenda</p>';
+        //lista de produtos
+        $html .= '<ul>';
+        foreach($dados_encomenda['lista_produtos'] as $produto){
+            $html .= "<li>$produto</li>";
+        }
+        $html .= '</ul>';
+        //valor total
+        $html .= '<p>Valor total:<strong> '.$dados_encomenda['total'].'</strong></p>';
+        
+        //dados do pagamento
+        $html .= '<hr>';
+        $html .= '<h4>Dados do Pagamento </h4>';
+        $html .= '<p>Número da conta: <strong>'.$dados_encomenda['dados_pagamento']['numero_conta'].'</strong></p>';
+        $html .= '<p>Código da encomenda: <strong>'.$dados_encomenda['dados_pagamento']['codigo_encomenda'].'</strong></p>';
+        $html .= '<p>Valor à Pagar: <strong>'.$dados_encomenda['dados_pagamento']['total'].'</strong></p>';
+        //nota importante
+        $html .= '<p><i><small>'.APP_NAME. ': A sua encomenda só será processada após o pagamento.</small></i></p>';
+        $html .= '<hr>';
+        $mail->Body = $html;
+        
         $mail->send();
         return true;
     } catch (Exception $e) {

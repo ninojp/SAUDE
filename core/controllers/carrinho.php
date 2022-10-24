@@ -121,8 +121,9 @@ class Carrinho
             foreach($dados_tmp as $item){
                 $total_da_encomenda += $item['preco'];
             }
-
             array_push($dados_tmp, $total_da_encomenda);
+            //colocar o preço total na sessão
+            $_SESSION['total_encomenda'] = $total_da_encomenda;
             $dados = ['carrinho'=>$dados_tmp];
         }
 
@@ -195,12 +196,20 @@ class Carrinho
         $dados = [];
         $dados['carrinho'] = $dados_tmp;
         //-------------------------------------------------------------------------
+        
         //buscar as informações do cliente
         $cliente = new Clientes();
         $dados_cliente = $cliente->buscar_dados_cliente($_SESSION['cliente']);
         $dados['cliente'] = $dados_cliente;
-        
         //-------------------------------------------------------------------------
+        
+        //Gerar o codigo da encomenda
+        if(!isset($_SESSION['codigo_encomenda'])){
+            $codigo_encomenda = Store::gerarCodigoEncomenda();
+            $_SESSION['codigo_encomenda'] = $codigo_encomenda;
+        }
+        //-------------------------------------------------------------------------
+
         //Apresenta a pagina da CARRINHO
         Store::Layout([
             'layouts/html_header', 'layouts/header',
@@ -217,19 +226,74 @@ class Carrinho
             'endereco' => $post['text_endereco'],
             'cidade' => $post['text_cidade'],
             'telefone' => $post['text_telefone'],
-            'email' => $post['text_email'],
-        ];
+            ];
     }
     //============================================================================
-    public function escolher_metodo_pagamento()
+    public function confirmar_encomenda()
     {
-        echo 'Escolher método de pagamento';
-        // $_SESSION['dados_alternativos'] = ['endereco'
-        // 'cidade'
-        // 'email'
-        // 'telefone'];
+        // Store::printData($_SESSION);
+        //guardar na base de dados a encomenda
+        //--------------------------------------------------------------------------
+        
 
-        Store::printData($_SESSION);
+        //--------------------------------------------------------------------------
+        //enviar email para o cliente com os dados da encomenda e pagamento
+        //buscar os dados dos produtos 
+        $ids = [];
+        foreach($_SESSION['carrinho'] as $id_produto => $quantidade){
+            array_push($ids, $id_produto);
+        }
+        $ids = implode(",", $ids);
+        $produtos = new Produtos();
+        $resultados = $produtos->buscar_produtos_por_ids($ids);
+
+        //estrutura dos dados dos produtos
+        $string_produtos = [];
+        
+        foreach($resultados as $resultado){
+            //quantidade
+            $quantidade = $_SESSION['carrinho'][$resultado->id_produto];
+            //stringo do produto
+            $string_produtos[] = "$quantidade x $resultado->nome_produto - ".'R$ '.number_format($resultado->preco,2,',','.'). '/unidade';
+        }
+        //lista de produtos para o email
+        $dados_encomenda['lista_produtos'] = $string_produtos;
+        
+        //preço total da encomenda para o email
+        $dados_encomenda['total'] = "R$ ".number_format($_SESSION['total_encomenda'],2,',','.');
+
+        //dados de pagamento
+        $dados_encomenda['dados_pagamento'] = [
+            'numero_conta'=>'123456789',
+            'codigo_encomenda'=>$_SESSION['codigo_encomenda'],
+            'total'=>"R$ ".number_format($_SESSION['total_encomenda'],2,',','.')
+        ];
+        //envio do email (encomenda) para o USUARIO
+        $email = new EnviarEmail();
+        $resultado = $email->enviar_email_confirmacao_encomenda($_SESSION['usuario'],$dados_encomenda);
+        die('Terminado!');
+        //--------------------------------------------------------------------------
+
+        //--------------------------------------------------------------------------
+        //guardar estes dados para aparecer na pagina de agradecer a encomenda
+        $codigo_encomenda = $_SESSION['codigo_encomenda'];
+        $total_encomenda = $_SESSION['total_encomenda'];
+        //--------------------------------------------------------------------------
+        
+        //--------------------------------------------------------------------------
+        // Limpar todos os dados da encomenda que estão no carrinho
+        //--------------------------------------------------------------------------
+        
+        //--------------------------------------------------------------------------
+        //Apresenta a pagina agradecer a encomenda
+        $dados = [
+            'codigo_encomenda' => $codigo_encomenda,
+            'total_encomenda' => $total_encomenda
+        ];
+        Store::Layout([
+            'layouts/html_header', 'layouts/header',
+            'encomenda_confirmada',
+            'layouts/footer', 'layouts/html_footer'], $dados);
     }
 }
 /* passos a serem feitos
@@ -257,5 +321,14 @@ imagem | titulo | quantidade | preço | (x)
 imagem | titulo | quantidade | preço | (x)
 imagem | titulo | quantidade | preço | (x)
                     total   | Sum()
+                   
+ - lista de produtos + quantidade + preço / unidade
+ 2x [nome produto] - preco unidade
+ 1x [nome produto] - preco unidade
+- total da encomenda
+dados de pagamento
+numero da conta
+codigo da encomenda
+total- R$
 
 */
