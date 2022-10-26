@@ -305,7 +305,7 @@ class Carrinho
         $dados_encomenda['codigo_encomenda'] = $_SESSION['codigo_encomenda'];
         
         //status da encomenda
-        $dados_encomenda['status'] = 'PENDENTE';
+        $dados_encomenda['estatos'] = 'PENDENTE';
         $dados_encomenda['mensagem'] = '';
 
         //------------------------------------------------------------------------
@@ -316,10 +316,8 @@ class Carrinho
             $dados_produto[] = [
                 'designacao_produto' => $produto->nome_produto,
                 'preco_unidade' => $produto->preco,
-                'quantidade' => $_SESSION['carrinho'][$produto->id_produto]
-            ];
+                'quantidade' => $_SESSION['carrinho'][$produto->id_produto]];
         }
-        
         // echo '<pre>';
         // print_r($dados_encomenda);
         // print_r($dados_produto);
@@ -329,6 +327,7 @@ class Carrinho
         $encomenda = new Encomendas();
         $encomenda->guardar_encomenda($dados_encomenda, $dados_produto);
 
+        die('Terminado...');
 
         $codigo_encomenda = $_SESSION['codigo_encomenda'];
         $total_encomenda = $_SESSION['total_encomenda'];

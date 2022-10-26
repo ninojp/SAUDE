@@ -64,7 +64,7 @@ CREATE TABLE `encomendas` (
   `email` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `telefone` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `codigo_encomenda` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `estatos` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `mensagem` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
