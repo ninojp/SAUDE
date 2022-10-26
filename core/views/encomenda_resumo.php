@@ -24,7 +24,7 @@
                                 <td class="text-center"><?= $produto['quantidade'] ?></td>
                                 <td class="text-end">
                                     <!--  //'R$ '.str_replace('.',',',$produto['preco'])  -->
-                                    <?= 'R$ ' . number_format($produto['preco'], 2, ',', '.'); ?>
+                                    <?='R$ '.number_format($produto['preco'], 2, ',', '.');?>
                                 </td>
                             </tr>
                         <?php else : ?>
@@ -36,8 +36,7 @@
                                     <h4><strong>Total:</strong></h4>
                                 </td>
                                 <td class="text-end">
-                                    <h4><strong>
-                                            <?= 'R$ ' . number_format($produto, 2, ',', '.'); ?></strong></h4>
+                                    <h4><strong><?= 'R$ '.number_format($produto, 2, ',', '.');?></strong></h4>
                                 </td>
                             </tr>
                     <?php endif;
@@ -45,16 +44,16 @@
                     endforeach; ?>
                 </tbody>
             </table>
-            <!-- Dados de Pagemento ----------------------------------------------------->
+            <!-- Exibe os Dados de Pagamento ------------------------------------------->
             <div class="row">
                 <div class="col-12 text-start">
                     <h4><strong>Dados de Pagamento:</strong></h4>
                     <p><strong>Conta bancária:</strong> 12345678</p>
-                    <p><strong>código da encomenda:</strong> <?= $_SESSION['codigo_encomenda'];?></p>
+                    <p><strong>código da encomenda:</strong> <?=$_SESSION['codigo_encomenda'];?></p>
                     <p><strong>Total:</strong> <?='R$ '.number_format($produto, 2, ',', '.');?></p>
-                </div>
+                </div><hr>
             </div>
-            <!-- Botões para finalizar a compra ----------------------------------------->
+            <!-- Botões para Cancelar a compra, Continuar comprando, Confirmar a encomenda ------------>
             <div class="row">
                 <div class="col-4 ps-5">
                     <a class="btn btn-sm btn-outline-danger" href="?a=carrinho">Cancelar a Compra</a>
@@ -76,28 +75,35 @@
             <strong>Cidade:</strong> <?= $cliente->cidade ?><br>
             <strong>Email:</strong> <?= $cliente->email ?><br>
             <strong>Telefone:</strong> <?= $cliente->telefone ?>
+            <hr>
             <!-- checkbox com as opções para troca dos dados do cliente ----------------->
             <div class="form-check m-0 p-0">    
                 <input class="form-check-input ms-3" onchange="usar_endereco_alternativo()" type="checkbox" name="check_endereco_alternativo" id="check_endereco_alternativo">
                 <label class="form-check-label ms-2" for="check_endereco_alternativo">Redefinir dados do cliente</label>
             </div>
-            <!-- endereço alternativo ---------------------------------------------------->
+            <!-- div do id=endereco_alternativo para controle com o checkbox -->
             <div id="endereco_alternativo" class="" style="display:none;">
+                <!-- endereço alternativo ------------------------------------------------>
             	<div class="input-group-sm mb-3">
                     <label class="form-label">Novo Endereço:</label>
                     <input class="form-control" type="text" id="text_endereco_alternativo">
                 </div> 
-            <!-- Cidade alternativa ------------------------------------------------------>
+                <!-- Cidade alternativa ------------------------------------------------------>
             	<div class="input-group-sm mb-3">
                     <label class="form-label">Nova Cidade:</label>
                     <input class="form-control" type="text" id="text_cidade_alternativo">
+                </div>
+                <!-- Telefone alternativo ---------------------------------------------------->
+            	<div class="input-group-sm mb-3">
+                    <label class="form-label">Novo Email:</label>
+                    <input class="form-control" type="email" id="text_email_alternativo">
                 </div> 
             <!-- Telefone alternativo ---------------------------------------------------->
             	<div class="input-group-sm mb-3">
                     <label class="form-label">Novo Telefone:</label>
                     <input class="form-control" type="text" id="text_telefone_alternativo">
                 </div> 
-            </div> 
+            </div><hr> 
         </div>
     </div>
 </div>

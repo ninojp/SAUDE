@@ -1,5 +1,14 @@
 adicionar o PHPMail ao nosso projeto
 
+/*status da encomenda
+PENDENTE - encomenda acabou de ser registrada
+PAGO - encomenda foi paga
+EM TRATAMENTO - está a ser processada pela loja
+ENVIADA - foi enviada por correio
+CANCELADA - 
+ENTREGUE - completamente finalizada
+*/
+
 Dados do FORMULARIO CLIENTES
 [text_email] => teste@nada.com
 [text_senha_1] => senha123

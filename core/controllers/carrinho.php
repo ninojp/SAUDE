@@ -6,7 +6,9 @@ namespace core\controllers;
 use core\classes\Database;
 use core\classes\EnviarEmail;
 use core\classes\Store;
+
 use core\models\Clientes;
+use core\models\Encomendas;
 use core\models\Produtos;
 
 class Carrinho
@@ -122,6 +124,7 @@ class Carrinho
                 $total_da_encomenda += $item['preco'];
             }
             array_push($dados_tmp, $total_da_encomenda);
+            
             //colocar o preço total na sessão
             $_SESSION['total_encomenda'] = $total_da_encomenda;
             $dados = ['carrinho'=>$dados_tmp];
@@ -219,42 +222,39 @@ class Carrinho
     //============================================================================
     public function endereco_alternativo()
     {
-        //receber os dados via AJAX(axios)
+        //receber os dados via AJAX(axios, json) e os coloca no $post(array)
         $post = json_decode(file_get_contents('php://input'), true);
+
         //adiciona ou altera na sessão a variável(array) dados_alternativos
         $_SESSION['dados_alternativos'] = [
             'endereco' => $post['text_endereco'],
             'cidade' => $post['text_cidade'],
+            'email' => $post['text_email'],
             'telefone' => $post['text_telefone'],
             ];
+            
     }
     //============================================================================
     public function confirmar_encomenda()
     {
-        // Store::printData($_SESSION);
-        //guardar na base de dados a encomenda
         //--------------------------------------------------------------------------
-        
-
-        //--------------------------------------------------------------------------
-        //enviar email para o cliente com os dados da encomenda e pagamento
-        //buscar os dados dos produtos 
+        //buscar os dados dos produtos(por id), para colocar no email de confirmar encomenda  
         $ids = [];
         foreach($_SESSION['carrinho'] as $id_produto => $quantidade){
             array_push($ids, $id_produto);
         }
         $ids = implode(",", $ids);
         $produtos = new Produtos();
-        $resultados = $produtos->buscar_produtos_por_ids($ids);
+        $produtos_da_encomenda = $produtos->buscar_produtos_por_ids($ids);
 
         //estrutura dos dados dos produtos
         $string_produtos = [];
         
-        foreach($resultados as $resultado){
-            //quantidade
+        foreach($produtos_da_encomenda as $resultado){
+            //buscar a quantidade
             $quantidade = $_SESSION['carrinho'][$resultado->id_produto];
-            //stringo do produto
-            $string_produtos[] = "$quantidade x $resultado->nome_produto - ".'R$ '.number_format($resultado->preco,2,',','.'). '/unidade';
+            //criar uma string do produto
+            $string_produtos[] = "$quantidade x $resultado->nome_produto - ".'R$ '.number_format($resultado->preco,2,',','.').' /unidade';
         }
         //lista de produtos para o email
         $dados_encomenda['lista_produtos'] = $string_produtos;
@@ -262,34 +262,92 @@ class Carrinho
         //preço total da encomenda para o email
         $dados_encomenda['total'] = "R$ ".number_format($_SESSION['total_encomenda'],2,',','.');
 
-        //dados de pagamento
+        //dados de pagamento da encomenda para o email
         $dados_encomenda['dados_pagamento'] = [
             'numero_conta'=>'123456789',
             'codigo_encomenda'=>$_SESSION['codigo_encomenda'],
             'total'=>"R$ ".number_format($_SESSION['total_encomenda'],2,',','.')
         ];
-        //envio do email (encomenda) para o USUARIO
-        $email = new EnviarEmail();
-        $resultado = $email->enviar_email_confirmacao_encomenda($_SESSION['usuario'],$dados_encomenda);
-        die('Terminado!');
-        //--------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
+        
+        //---------------------------------------------------------------------------
+        //enviar email para o cliente com os dados da encomenda e pagamento
 
+        //envio do email (encomenda) para o USUARIO
+        // $email = new EnviarEmail();
+        // $resultado = $email->enviar_email_confirmacao_encomenda($_SESSION['usuario'],$dados_encomenda);
         //--------------------------------------------------------------------------
-        //guardar estes dados para aparecer na pagina de agradecer a encomenda
+        
+        //--------------------------------------------------------------------------
+        //guardar na base de dados a encomenda
+        $dados_encomenda = [];
+        $dados_encomenda['id_cliente']=$_SESSION['cliente'];
+
+        //verificar se existe dados no array dados_alternativos.
+        if(isset($_SESSION['dados_alternativos']['endereco']) && !empty($_SESSION['dados_alternativos']['endereco'])){
+            //considerar(colocar no array $dados_encomenda) os dados alternativos
+            $dados_encomenda['endereco'] = $_SESSION['dados_alternativos']['endereco'];
+            $dados_encomenda['cidade'] = $_SESSION['dados_alternativos']['cidade'];
+            $dados_encomenda['email'] = $_SESSION['dados_alternativos']['email'];
+            $dados_encomenda['telefone'] = $_SESSION['dados_alternativos']['telefone'];
+        } else {
+            //considerar(deixar) os dados que já estavam na base de dados(cliente)
+            $cliente = new Clientes();
+            $dados_cliente = $cliente->buscar_dados_cliente($_SESSION['cliente']);
+
+            $dados_encomenda['endereco'] = $dados_cliente->endereco;
+            $dados_encomenda['cidade'] = $dados_cliente->cidade;
+            $dados_encomenda['email'] = $dados_cliente->email;
+            $dados_encomenda['telefone'] = $dados_cliente->telefone;
+        }
+
+        //codigo encomenda
+        $dados_encomenda['codigo_encomenda'] = $_SESSION['codigo_encomenda'];
+        
+        //status da encomenda
+        $dados_encomenda['status'] = 'PENDENTE';
+        $dados_encomenda['mensagem'] = '';
+
+        //------------------------------------------------------------------------
+        //dados dos produtos da encomenda
+        // $produtos_da_encomenda (nome_produto, preco)
+        $dados_produto = [];
+        foreach($produtos_da_encomenda as $produto){
+            $dados_produto[] = [
+                'designacao_produto' => $produto->nome_produto,
+                'preco_unidade' => $produto->preco,
+                'quantidade' => $_SESSION['carrinho'][$produto->id_produto]
+            ];
+        }
+        
+        // echo '<pre>';
+        // print_r($dados_encomenda);
+        // print_r($dados_produto);
+        // echo '</pre>';
+        // die("vai ate aqui!");
+
+        $encomenda = new Encomendas();
+        $encomenda->guardar_encomenda($dados_encomenda, $dados_produto);
+
+
         $codigo_encomenda = $_SESSION['codigo_encomenda'];
         $total_encomenda = $_SESSION['total_encomenda'];
+
+        
         //--------------------------------------------------------------------------
         
         //--------------------------------------------------------------------------
         // Limpar todos os dados da encomenda que estão no carrinho
+
         //--------------------------------------------------------------------------
         
         //--------------------------------------------------------------------------
-        //Apresenta a pagina agradecer a encomenda
+        //guardar estes dados, após a sessão ser limpa
         $dados = [
             'codigo_encomenda' => $codigo_encomenda,
             'total_encomenda' => $total_encomenda
         ];
+        //Apresenta a pagina(view) agradecer a encomenda
         Store::Layout([
             'layouts/html_header', 'layouts/header',
             'encomenda_confirmada',

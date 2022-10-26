@@ -14,6 +14,7 @@ function limpar_carrinho(){
    var e = document.getElementById("confirmar_limpar_carrinho");
    e.style.display = "inline";
 }
+//----------------------------------------------------------------------------
 function limpar_carrinho_off(){
    var e = document.getElementById("confirmar_limpar_carrinho");
    e.style.display = "none";
@@ -32,18 +33,17 @@ function usar_endereco_alternativo(){
 }
 //============================================================================
 function endereco_alternativo(){
-   
+/* vai buscar os dados do input
+   vai enviar por url via post por axios para um método da controlador
+   método do controlador vai receber os dados e colocar na sessão   */
   axios({
    method: 'post',
    url: '?a=endereco_alternativo',
    data: {
       text_endereco: document.getElementById('text_endereco_alternativo').value,
       text_cidade: document.getElementById('text_cidade_alternativo').value,
+      text_email: document.getElementById('text_email_alternativo').value,
       text_telefone: document.getElementById('text_telefone_alternativo').value,
    }
   });
-  /*vai buscar os dados do input
-   vai enviar por url via post por axios para um método da controlador
-   método do controlador vai receber os dados e colocar na sessão
-   */
 }

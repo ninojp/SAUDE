@@ -7,8 +7,7 @@ use PHPMailer\PHPMailer\Exception;
 
 class EnviarEmail{
     //=================================================================================
-    public function enviar_email_confirmacao_novo_cliente($email_cliente, $purl)
-    {
+    public function enviar_email_confirmacao_novo_cliente($email_cliente, $purl){
     //constroi o purl (link para validação do email)
     $link = BASE_URL.'?a=confirmar_email&purl='.$purl;
     //envia um email de confirmção para um novo cliente
@@ -31,7 +30,7 @@ class EnviarEmail{
 
         //Emissor e receptor
         $mail->setFrom(MAIL_FROM, APP_NAME);
-        $mail->addAddress($email_cliente);     //Add a recipient
+        $mail->addAddress($email_cliente);     //endereço que vai receber o email 
         // $mail->addAddress('ellen@example.com');               //Name is optional
         // $mail->addReplyTo('info@example.com', 'Information');
         // $mail->addCC('cc@example.com');
@@ -100,7 +99,7 @@ class EnviarEmail{
         $html .= '<p>Código da encomenda: <strong>'.$dados_encomenda['dados_pagamento']['codigo_encomenda'].'</strong></p>';
         $html .= '<p>Valor à Pagar: <strong>'.$dados_encomenda['dados_pagamento']['total'].'</strong></p>';
         //nota importante
-        $html .= '<p><i><small>'.APP_NAME. ': A sua encomenda só será processada após o pagamento.</small></i></p>';
+        $html .= '<p><i><small>'.APP_NAME.': A sua encomenda só será processada após o pagamento.</small></i></p>';
         $html .= '<hr>';
         $mail->Body = $html;
         
