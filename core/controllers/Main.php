@@ -230,4 +230,115 @@ class Main
         //redireciona para o inicio da loja
         Store::redirect();
     }
+    //============================================================================
+    // PERFIL DO USUARIO
+    //============================================================================
+    public function perfil()
+    {
+        //verificar se existe um utilizador logado
+        if (!Store::clienteLogado()) {
+            Store::redirect();
+            return;
+        }
+
+        //buscar informações do cliente
+        $cliente = new Clientes();
+        // $dados = ['dados_cliente' => $cliente->buscar_dados_cliente($_SESSION['cliente'])];
+        $dtemp = $cliente->buscar_dados_cliente($_SESSION['cliente']);
+
+        $dados_cliente = [
+            'Email' => $dtemp->email,
+            'Nome Completo' => $dtemp->nome_completo,
+            'Endereco' => $dtemp->endereco,
+            'Cidade' => $dtemp->cidade,
+            'Telefone' => $dtemp->telefone];
+        $dados = ['dados_cliente' => $dados_cliente];
+
+        //apresentação da pagina de perfil
+        Store::Layout([
+            'layouts/html_header', 'layouts/header',
+            'perfil_navegacao',
+            'perfil',
+            'layouts/footer', 'layouts/html_footer'], $dados);
+    }
+    //============================================================================
+    public function alterar_dados_pessoais()
+    {
+        //verificar se existe um utilizador logado
+        if (!Store::clienteLogado()) {
+            Store::redirect();
+            return;
+        }
+
+        //vai buscar os dados pessoais
+        $cliente = new Clientes();
+        $dados = [
+            'dados_pessoais'=>$cliente->buscar_dados_cliente($_SESSION['cliente'])
+        ];
+        //apresentação da pagina de perfil
+        Store::Layout([
+            'layouts/html_header', 'layouts/header',
+            'perfil_navegacao',
+            'alterar_dados_pessoais',
+            'layouts/footer', 'layouts/html_footer'], $dados);
+    }
+    //============================================================================
+    public function alterar_dados_pessoais_submit()
+    {
+        //verificar se existe um utilizador logado
+        if (!Store::clienteLogado()) {
+            Store::redirect();
+            return;
+        }
+       
+        //verifica se existiu submissão de formulário
+        if($_SERVER['REQUEST_METHOD'] != 'POST'){
+            Store::redirect();
+            return;
+        }
+        //validadr os dados q vem do formulário
+        $email = trim(strtolower($_POST['text_email']));
+        $nome_completo = trim($_POST['text_nome_completo']);
+        $endereco = trim($_POST['text_endereco']);
+        $cidade = trim($_POST['text_cidade']);
+        $telefone = trim($_POST['text_telefone']);
+
+        //validadr se é um email válido
+        if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+            $_SESSION['erro_email_invalido'] = "Endereço de email inválido";
+            $this->alterar_dados_pessoais();
+            return;
+        }
+        //validar os campos restantes(deveria ser feito por cada item, mas por falta de tempo)
+        if(empty($nome_completo) || empty($endereco) || empty($cidade)){
+            $_SESSION['erro_dados_form'] = "Preencha corretamente os campos!";
+            $this->alterar_dados_pessoais();
+            return;
+        }
+        //validar se este email já existe na base de dados
+        $cliente = new Clientes();
+        $existe_outra_conta = $cliente->verificar_email_existe_outra_conta($_SESSION['cliente'],$email);
+        if($existe_outra_conta){
+            $_SESSION['erro_email_igual'] = "Este email já pertence a outro cliente!";
+            $this->alterar_dados_pessoais();
+            return;
+        }
+        //atualizar os dados do cliente na base de dados
+        $cliente->atualizar_dados_cliente();
+    }
+    //============================================================================
+    public function alterar_password()
+    {
+        echo'Alterar password';
+    }
+    //============================================================================
+    public function alterar_password_submit()
+    {
+        echo'Alterar password Submit';
+    }
+    //============================================================================
+    public function historico_encomendas()
+    {
+        echo'histórico das encomendas';
+    }
 }

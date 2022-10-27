@@ -137,6 +137,21 @@ class Carrinho
             'layouts/footer', 'layouts/html_footer'], $dados);
     }
     //============================================================================
+    public function endereco_alternativo()
+    {
+        //receber os dados via AJAX(axios, json) e os coloca no $post(array)
+        $post = json_decode(file_get_contents('php://input'), true);
+
+        //adiciona ou altera na sessão a variável(array) dados_alternativos
+        $_SESSION['dados_alternativos'] = [
+            'endereco' => $post['text_endereco'],
+            'cidade' => $post['text_cidade'],
+            'email' => $post['text_email'],
+            'telefone' => $post['text_telefone'],
+            ];
+            
+    }
+    //============================================================================
     public function finalizar_encomenda()
     {
         // verifica se existe cliente logado
@@ -156,6 +171,12 @@ class Carrinho
         if(!isset($_SESSION['cliente'])){
             Store::redirect('inicio');
         }
+        //verifica se pode avançar para a gravação da encomenda
+        if(!isset($_SESSION['carrinho']) || count($_SESSION['carrinho']) == 0){
+            Store::redirect('inicio');
+            return;
+        }
+
         //-------------------------------------------------------------------------
         //informações do carrinho
         $ids = [];
@@ -220,25 +241,24 @@ class Carrinho
             'layouts/footer', 'layouts/html_footer'], $dados);
     }
     //============================================================================
-    public function endereco_alternativo()
-    {
-        //receber os dados via AJAX(axios, json) e os coloca no $post(array)
-        $post = json_decode(file_get_contents('php://input'), true);
-
-        //adiciona ou altera na sessão a variável(array) dados_alternativos
-        $_SESSION['dados_alternativos'] = [
-            'endereco' => $post['text_endereco'],
-            'cidade' => $post['text_cidade'],
-            'email' => $post['text_email'],
-            'telefone' => $post['text_telefone'],
-            ];
-            
-    }
-    //============================================================================
     public function confirmar_encomenda()
     {
         //--------------------------------------------------------------------------
-        //buscar os dados dos produtos(por id), para colocar no email de confirmar encomenda  
+        //verifica se existe cliente logado
+        if(!isset($_SESSION['cliente'])){
+            Store::redirect('inicio');
+            return;
+        }
+        //verifica se pode avançar para a gravação da encomenda
+        if(!isset($_SESSION['carrinho']) || count($_SESSION['carrinho']) == 0){
+            Store::redirect('inicio');
+            return;
+        }
+
+        //enviar email para o cliente com os dados da encomenda e pagamento
+        $dados_encomenda = [];
+
+        //buscar os dados dos produtos(por id) 
         $ids = [];
         foreach($_SESSION['carrinho'] as $id_produto => $quantidade){
             array_push($ids, $id_produto);
@@ -305,39 +325,38 @@ class Carrinho
         $dados_encomenda['codigo_encomenda'] = $_SESSION['codigo_encomenda'];
         
         //status da encomenda
-        $dados_encomenda['estatos'] = 'PENDENTE';
+        $dados_encomenda['status'] = 'PENDENTE';
         $dados_encomenda['mensagem'] = '';
 
         //------------------------------------------------------------------------
         //dados dos produtos da encomenda
         // $produtos_da_encomenda (nome_produto, preco)
-        $dados_produto = [];
+        $dados_produtos = [];
         foreach($produtos_da_encomenda as $produto){
-            $dados_produto[] = [
+            $dados_produtos[] = [
                 'designacao_produto' => $produto->nome_produto,
                 'preco_unidade' => $produto->preco,
                 'quantidade' => $_SESSION['carrinho'][$produto->id_produto]];
         }
-        // echo '<pre>';
-        // print_r($dados_encomenda);
-        // print_r($dados_produto);
-        // echo '</pre>';
-        // die("vai ate aqui!");
-
+  
         $encomenda = new Encomendas();
-        $encomenda->guardar_encomenda($dados_encomenda, $dados_produto);
+        $encomenda->guardar_encomenda($dados_encomenda, $dados_produtos);
 
-        die('Terminado...');
 
+        //preparar os dados para apresentar na pagina de agradecimento
         $codigo_encomenda = $_SESSION['codigo_encomenda'];
         $total_encomenda = $_SESSION['total_encomenda'];
 
-        
         //--------------------------------------------------------------------------
         
         //--------------------------------------------------------------------------
         // Limpar todos os dados da encomenda que estão no carrinho
+        unset($_SESSION['codigo_encomenda']);
+        unset($_SESSION['carrinho']);
+        unset($_SESSION['total_encomenda']);
+        unset($_SESSION['dados_alternativos']);
 
+        
         //--------------------------------------------------------------------------
         
         //--------------------------------------------------------------------------
@@ -354,7 +373,15 @@ class Carrinho
     }
 }
 /* passos a serem feitos
-verificar se existe cliente logado
+
+// apenas para DEBUG de codigo
+echo '<pre>';
+print_r($dados_encomenda);
+print_r($produtos_da_encomenda);
+echo '</pre>';
+die("vai ate aqui!");
+
+    verificar se existe cliente logado
     não existe?
     - colocar um "referrer" na sessão
     - abrir o quadro de login

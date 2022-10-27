@@ -7,10 +7,20 @@ $rotas = [
     'novo_cliente' => 'main@novo_cliente',
     'criar_cliente' => 'main@criar_cliente',
     'confirmar_email' => 'main@confirmar_email',
+
     //login
     'login' => 'main@login',
     'login_submit' => 'main@login_submit',
     'logout' => 'main@logout',
+
+    //Perfil
+    'perfil' => 'main@perfil',
+    'alterar_dados_pessoais' => 'main@alterar_dados_pessoais',
+    'alterar_dados_pessoais_submit' => 'main@alterar_dados_pessoais_submit',
+    'alterar_password' => 'main@alterar_password',
+    'alterar_password_submit' => 'main@alterar_password_submit',
+    'historico_encomendas' => 'main@historico_encomendas',
+
     //carrinho
     'adicionar_carrinho' => 'carrinho@adicionar_carrinho',
     'remover_produto_carrinho' => 'carrinho@remover_produto_carrinho',

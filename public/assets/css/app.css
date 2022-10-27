@@ -31,7 +31,7 @@
 .nav_link{
     text-decoration: none;
     color: var(--br);
-    margin: 0px 10px;
+    margin-right: 20px;
 }
 .nav_link:hover{
     text-decoration: underline;

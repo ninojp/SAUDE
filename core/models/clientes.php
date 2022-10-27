@@ -106,4 +106,34 @@ class Clientes
         $resultados = $bd->select("SELECT email, nome_completo, endereco, cidade, telefone FROM clientes WHERE id_cliente=:id_cliente", $parametros);
         return $resultados[0];
     }
+    //===================================================================================
+    public function verificar_email_existe_outra_conta($id_cliente, $email)
+    {
+        //verificar se existe a conta de email em outra conta de cliente
+        $parametros = [
+            ':email'=>$email,
+            ':id_cliente'=>$id_cliente
+        ];
+        $bd = new Database();
+        $resultados = $bd->select("SELECT id_cliente FROM clientes WHERE id_cliente <> :id_cliente AND email=:email",$parametros);
+        if(count($resultados) != 0){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    //===================================================================================
+    public function atualizar_dados_cliente($email, $nome_completo, $endereco, $cidade, $telefone)
+    {
+        //atualize os dados do cliente na base de dados
+        $parametros = [
+            ':email'=>$email,
+            ':nome_completo'=>$nome_completo,
+            ':endereco'=>$endereco,
+            ':cidade'=>$cidade,
+            ':telefone'=>$telefone
+        ];
+        $bd=new Database();
+        $bd->update("",$parametros);
+    }
 }
