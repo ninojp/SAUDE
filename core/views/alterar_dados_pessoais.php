@@ -51,10 +51,3 @@
         </div>
     </div>
 </div>
-<!-- 
-[email] => meu.sem@gmail.com
-[nome_completo] => Edenilson JP
-[endereco] => Meu endereço a atual
-[cidade] => Floranópolis
-[telefone] => (48) 98466 6666 
--->

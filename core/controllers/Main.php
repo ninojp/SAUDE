@@ -324,17 +324,84 @@ class Main
             return;
         }
         //atualizar os dados do cliente na base de dados
-        $cliente->atualizar_dados_cliente();
+        $cliente->atualizar_dados_cliente($email, $nome_completo, $endereco, $cidade, $telefone);
+        
+        //atualiza os dados do cliente na sessão
+        $_SESSION['usuario']=$email;
+        $_SESSION['nome_cliente']=$nome_completo;
+        
+        //redireciona para a pagina do perfil
+        Store::redirect('perfil');
     }
     //============================================================================
     public function alterar_password()
     {
-        echo'Alterar password';
+        //verificar se existe um utilizador logado
+        if (!Store::clienteLogado()) {
+            Store::redirect();
+            return;
+        }
+
+        //apresentação da pagina de alteração da password
+        Store::Layout([
+            'layouts/html_header', 'layouts/header',
+            'perfil_navegacao',
+            'alterar_password',
+            'layouts/footer', 'layouts/html_footer']);
     }
     //============================================================================
     public function alterar_password_submit()
     {
-        echo'Alterar password Submit';
+        //verificar se existe um utilizador logado
+        if (!Store::clienteLogado()) {
+            Store::redirect();
+            return;
+        }
+       
+        //verifica se existiu submissão de formulário
+        if($_SERVER['REQUEST_METHOD'] != 'POST'){
+            Store::redirect();
+            return;
+        }
+        //validar os dados q vem do formulário
+        $senha_atual = trim($_POST['text_senha_atual']);
+        $nova_senha = trim($_POST['text_nova_senha']);
+        $repetir_nova_senha = trim($_POST['text_repetir_nova_senha']);
+                
+        //validar se a nova senha vem com dados corretos(quantidade)
+        if(strlen($nova_senha) < 6){
+            $_SESSION['erro_senha'] = "A nova senha precisa ter mais de 6 caracteres!";
+            $this->alterar_password();
+            return;
+        }
+
+        //verificar se as senhas novas coincidem
+        if($nova_senha != $repetir_nova_senha){
+            $_SESSION['erro_senha'] = "As senhas não são iguais!";
+            $this->alterar_password();
+            return;
+        }
+
+        //verificar se a senha atual está correta
+        $cliente = new Clientes();
+        if(!$cliente->ver_se_senha_esta_correta($_SESSION['cliente'], $senha_atual)){
+            $_SESSION['erro_senha'] = "A Senha Atual está errada!";
+            $this->alterar_password();
+            return;
+        }
+
+        //verificar se a NOVA é diferente da senha ATUAL 
+        if($senha_atual == $nova_senha){
+            $_SESSION['erro_senha'] = "A NOVA Senha é igual a senha ATUAL!";
+            $this->alterar_password();
+            return;
+        }
+        //atualizar a nova senha
+        $cliente->atualizar_nova_senha($_SESSION['cliente'],$nova_senha);
+
+        //redirecionar para a pagina do perfil
+        Store::redirect('perfil');
+
     }
     //============================================================================
     public function historico_encomendas()
