@@ -7,6 +7,7 @@ use core\classes\Database;
 use core\classes\EnviarEmail;
 use core\classes\Store;
 use core\models\Clientes;
+use core\models\Encomendas;
 use core\models\Produtos;
 
 class Main
@@ -406,6 +407,73 @@ class Main
     //============================================================================
     public function historico_encomendas()
     {
-        echo'histórico das encomendas';
+        //verificar se existe um utilizador logado
+        if (!Store::clienteLogado()) {
+            Store::redirect();
+            return;
+        }
+        //carrega o histórico das encomendas
+        $encomendas = new Encomendas();
+        $historico_encomendas = $encomendas->buscar_historico_encomendas($_SESSION['cliente']);
+        
+        $data = ['historico_encomendas'=>$historico_encomendas];
+
+        //apresenta a view com o historico das encomendas
+        Store::Layout([
+            'layouts/html_header', 'layouts/header',
+            'perfil_navegacao',
+            'historico_encomendas',
+            'layouts/footer', 'layouts/html_footer'], $data);
+        /*
+        apresentar uma tabela com as encomendas eo seu estado
+        - detalhes de cada encomenda
+        */
+    }
+    //============================================================================
+    public function historico_encomendas_detalhe()
+    {
+       //verificar se existe um utilizador logado
+       if (!Store::clienteLogado()) {
+        Store::redirect();
+        return;
+       }
+      //verificar se veio indicado um id_encomenda (encriptado)
+      if(!isset($_GET['id'])){
+        Store::redirect();
+        return;
+      }
+      $id_encomenda = null;
+      //verifica se o id_encomenda é uma string com 32 caracteres
+      if(strlen($_GET['id']) != 32){
+        Store::redirect();
+        return;
+      } else {
+        $id_encomenda = Store::aesDesencriptar($_GET['id']);
+        if(empty($id_encomenda)){
+            Store::redirect();
+        return;
+        }
+      }
+      //verifica se a encomenda pertence a este cliente
+      $encomendas = new Encomendas();
+      $resultado = $encomendas->verificar_encomenda_cliente($_SESSION['cliente'], $id_encomenda);
+      if(!$resultado){
+        Store::redirect();
+        return;
+      }
+      //vamos buscar os dados de detalhes da encomenda
+      $detalhe_encomenda = $encomendas->detalhes_encomenda($_SESSION['cliente'], $id_encomenda);
+      
+      $data = [
+        'dados_encomenda'=>$detalhe_encomenda['dados_encomenda'],
+        'produtos_encomenda'=>$detalhe_encomenda['produtos_encomenda']];
+
+      //vamos apresentar a  nova view com esses dados.
+      Store::Layout([
+        'layouts/html_header', 'layouts/header',
+        'perfil_navegacao',
+        'encomenda_detalhe',
+        'layouts/footer', 'layouts/html_footer'], $data);
+
     }
 }

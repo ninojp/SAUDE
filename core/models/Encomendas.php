@@ -12,7 +12,7 @@ class Encomendas
     public function guardar_encomenda($dados_encomenda, $dados_produtos)
     {
         $bd = new Database();
-        //------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------
         //guardar os dados da encomenda
         $parametros = [
             ':id_cliente' => $_SESSION['cliente'],
@@ -39,10 +39,49 @@ class Encomendas
             ];
             $bd->insert("INSERT INTO encomenda_produto VALUES(0, :id_encomenda, :designacao_produto, :preco_unidade, :quantidade, NOW() )", $parametros);
         }
-        /*
- 1.- guardar os dados da encomenda
- 2.- buscar o id_encomenda criado
- 3. - guardar os dados dos produtos da encomenda
-*/
+    }
+    //================================================================================
+    public function buscar_historico_encomendas($id_cliente)
+    {
+        //buscar o histórico de encomendas do cliente = id_cliente
+        $parametros = [
+            ':id_cliente'=>$id_cliente];
+
+        $bd = new Database();
+        $resultados = $bd->select("SELECT id_encomenda, data_encomenda, codigo_encomenda, status FROM encomendas WHERE id_cliente=:id_cliente ORDER BY data_encomenda DESC",$parametros);
+        return $resultados;
+
+    }
+    //================================================================================
+    public function verificar_encomenda_cliente($id_cliente, $id_encomenda)
+    {
+        //verificar se a encomenda pertence ao cliente identificado
+        $parametros = [
+            ':id_cliente'=>$id_cliente,
+            ':id_encomenda'=>$id_encomenda
+        ];
+        $bd = new Database();
+        $resultado = $bd->select("SELECT id_encomenda FROM encomendas WHERE id_encomenda=:id_encomenda AND id_cliente=:id_cliente",$parametros);
+        return count($resultado) == 0 ? false : true;
+    }
+    //================================================================================
+    public function detalhes_encomenda($id_cliente, $id_encomenda)
+    {
+        //vai buscar os dados da encomenda e a lista dos produtos da encomenda
+        $parametros = [
+            ':id_cliente'=>$id_cliente,
+            ':id_encomenda'=>$id_encomenda
+        ];
+        //dados da encomenda
+        $bd = new Database();
+        $dados_encomenda=$bd->select("SELECT * FROM encomendas WHERE id_cliente=:id_cliente AND id_encomenda=:id_encomenda ", $parametros)[0];
+
+        //dados da lista de produtos da encomenda
+        $parametros = [':id_encomenda'=>$id_encomenda];
+        $produtos_encomenda = $bd->select("SELECT * FROM encomenda_produto WHERE id_encomenda=:id_encomenda ", $parametros);
+
+        //devolver ao controlador os dados do detalhe da encomenda
+        return ['dados_encomenda'=>$dados_encomenda,
+                'produtos_encomenda'=>$produtos_encomenda];
     }
 }

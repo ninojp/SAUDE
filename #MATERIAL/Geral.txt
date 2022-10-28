@@ -8,17 +8,9 @@ ENVIADA - foi enviada por correio
 CANCELADA - 
 ENTREGUE - completamente finalizada
 */
-
-Dados do FORMULARIO CLIENTES
-[text_email] => teste@nada.com
-[text_senha_1] => senha123
-[text_senha_2] => senha123
-[text_nome_completo] => Meu Nome
-[text_endereco] => morada do cliente
-[text_cidade] => cidade
-[text_telefone] => 
-
-Campos da tabela CLIENTES
+============================================================================================
+TABELA CLIENTES
+-------------------------------------------------------------------------------------------
 id_cliente
 email 
 senha
@@ -31,27 +23,23 @@ activo
 created_at
 updated_at
 deleted_at
+============================================================================================
+TABELA ENCOMENDAS
+-------------------------------------------------------------------------------------------
+id_encomenda
+id_cliente
+data_encomenda
+endereco
+cidade
+email
+telefone
+codigo_encomenda
+estatos
+mensagem
+created_at
+updated_at
+============================================================================================
 
-===========================================================================================================
-CODIGO DE CRIAÇÃO DA TABELA CLIENTES
-===========================================================================================================
-CREATE TABLE `clientes` (
-	`id_cliente` INT(10) NOT NULL AUTO_INCREMENT,
-	`email` VARCHAR(100) NOT NULL COLLATE 'utf8mb4_unicode_ci',
-	`senha` VARCHAR(250) NOT NULL COLLATE 'utf8mb4_unicode_ci',
-	`nome_completo` VARCHAR(250) NOT NULL COLLATE 'utf8mb4_unicode_ci',
-	`endereco` VARCHAR(250) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
-	`cidade` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
-	`telefone` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
-	`purl` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
-	`activo` TINYINT(4) NULL DEFAULT '0',
-	`created_at` DATETIME NULL DEFAULT current_timestamp(),
-	`updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-	`deleted_at` DATETIME NULL DEFAULT NULL,
-	PRIMARY KEY (`id_cliente`) USING BTREE
-)
-COLLATE='utf8mb4_unicode_ci'
-ENGINE=InnoDB
-AUTO_INCREMENT=4
-;
-==========================================================================================================
+============================================================================================
+
+============================================================================================

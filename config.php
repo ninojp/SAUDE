@@ -12,6 +12,10 @@ define('MYSQL_USER', 'NinoJP');
 define('MYSQL_PASS', 'chNd@w40_(rWpyQC');
 define('MYSQL_CHARSET', 'utf8');
 
+//AES Encriptação
+define('AES_KEY', 'HhEvhIr3VJ7s9IO23LhcG6F1g4dmNVoI');
+define('AES_IV', '7ttgXvsnIE9K8Tys');
+
 //autentificação do EMAIL google
 define('MAIL_HOST', 'smtp.gmail.com');
 define('MAIL_FROM', 'meuemailparablog@gmail.com');
