@@ -464,9 +464,17 @@ class Main
       //vamos buscar os dados de detalhes da encomenda
       $detalhe_encomenda = $encomendas->detalhes_encomenda($_SESSION['cliente'], $id_encomenda);
       
+      //calcular o valor total da encomenda
+      $total = 0;
+      foreach($detalhe_encomenda['produtos_encomenda'] as $produto){
+        $total += ($produto->quantidade * $produto->preco_unidade);
+      }
+
+
       $data = [
         'dados_encomenda'=>$detalhe_encomenda['dados_encomenda'],
-        'produtos_encomenda'=>$detalhe_encomenda['produtos_encomenda']];
+        'produtos_encomenda'=>$detalhe_encomenda['produtos_encomenda'],
+        'total_encomenda'=>$total];
 
       //vamos apresentar a  nova view com esses dados.
       Store::Layout([
