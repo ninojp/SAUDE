@@ -1,7 +1,7 @@
 <?php
 /* Terá as configurações básicas da aplicação, as definições das CONSTANTES */
 define('APP_NAME', 'SAÚDE');
-define('APP_VERSION', '0.0.1');
+define('APP_VERSION', '0.1.0');
 //URL atual do meu site
 define('BASE_URL','https://localhost/SAUDE/public/');
 

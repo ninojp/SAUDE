@@ -34,12 +34,40 @@ cidade
 email
 telefone
 codigo_encomenda
-estatos
+status
 mensagem
 created_at
 updated_at
 ============================================================================================
+Array
+	$dados_encomenda
+    [dados_encomenda] => stdClass Object
+
+            [id_encomenda] => 2
+            [id_cliente] => 1
+            [data_encomenda] => 2022-10-26 20:55:32
+            [endereco] => Meu endereço a atual
+            [cidade] => Floranópolis
+            [email] => meu.sem@gmail.com
+            [telefone] => (48) 98466 6666
+            [codigo_encomenda] => DW664439
+            [status] => PENDENTE
+            [mensagem] => 
+            [created_at] => 2022-10-26 20:55:32
+            [updated_at] => 2022-10-26 20:55:32
+        )
+	$produtos_encomenda
+    [produtos_encomenda] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [id_encomenda_produto] => 3
+                    [id_encomenda] => 2
+                    [designacao_produto] => Vertido Azul
+                    [preco_unidade] => 86.00
+                    [quantidade] => 3
+                    [created_at] => 2022-10-26 20:55:32
 
 ============================================================================================
-
+        date_format($date,"Y/m/d H:i:s");
 ============================================================================================

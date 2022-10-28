@@ -84,4 +84,20 @@ class Encomendas
         return ['dados_encomenda'=>$dados_encomenda,
                 'produtos_encomenda'=>$produtos_encomenda];
     }
+    //================================================================================
+    public function efetuar_pagamento($codigo_encomenda)
+    {
+        $parametros = [':codigo_encomenda'=>$codigo_encomenda];
+
+        $bd = new Database();
+        $resultado = $bd->select("SELECT * FROM encomendas WHERE codigo_encomenda=:codigo_encomenda AND status='PENDENTE' ",$parametros);
+
+        if(count($resultado) == 0){
+            return false;
+        }
+
+        //efetuar a alteração do estado(status) da encomenda indicada
+        $bd->update("UPDATE encomendas SET status='EM PROCESSAMENTO', updated_at=NOW() WHERE codigo_encomenda=:codigo_encomenda ",$parametros);
+        return true;
+    }
 }

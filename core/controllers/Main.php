@@ -484,4 +484,27 @@ class Main
         'layouts/footer', 'layouts/html_footer'], $data);
 
     }
+    //============================================================================
+    public function pagamento()
+    {
+        //simulação do webhook do getaway de pagamento
+
+/*
+verificar se vem o código da encomenda
+verificar se a encomenda com o código indicado está pendente
+alterar o estado da encomenda de pendente para em processamento
+
+*/
+        //verificar se o código da encomenda veio indicado
+        $codigo_encomenda = '';
+        if(!isset($_GET['cod'])){
+            return;
+        } else {
+            $codigo_encomenda = $_GET['cod'];
+        }
+        //verificar se existe o código ativo (PENDENTE)
+        $encomenda = new Encomendas();
+        $resultado = $encomenda->efetuar_pagamento($codigo_encomenda);
+        echo (int)$resultado;
+    }
 }
