@@ -2,8 +2,12 @@
 //Coleção de rotas
 $rotas = [
     'inicio'=>'admin@index',
-    'lista_clientes'=>'admin@lista_clientes',
+     //rotas de LOGIN
+    'admin_login'=>'admin@admin_login',
+    'admin_login_submit'=>'admin@admin_login_submit',
+    'admin_logout'=>'admin@admin_logout',
 
+    'lista_clientes'=>'admin@lista_clientes',
 ];
 
 //Define uma ação por default

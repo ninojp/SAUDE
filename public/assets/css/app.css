@@ -17,9 +17,11 @@
     --gold: rgba(255,215,0,1);
     --vermelho: rgba(172,2,2,1);
 }
-/* *{
+/* apenas adiciona bordas a todas as BOX
+*{
     box-shadow: inset 0px 0px 1px rgba(255,0,0,0.5);
-} */
+}
+ */
 .navegacao{
     background-color: var(--verdC);
     color: var(--azuEsc);
@@ -51,4 +53,12 @@
 .box-produto{
     border: 1px solid rgba(150, 150, 150, 0.5);
     border-radius: 10px;
+}
+/***********************************************************************************
+* CSS para meu BackOffice - Admin
+************************************************************************************/
+.div_menu_admin{
+    background-color: var(--verdC);
+    padding: 20px;
+    height: 80vh;
 }
