@@ -24,9 +24,11 @@ class Admin
 
         //verificar o total de encomendas em status (PENDENTES)
         $ADMIN = new AdminModel();
-        $total_encomendas_pendentes = $ADMIN->total_encomendas_pendentes();
+        $total_encomenda_pendente = $ADMIN->total_encomenda_pendente();
+        $total_encomenda_processamento = $ADMIN->total_encomenda_processamento();
 
-        $data = ['total_encomendas_pendentes'=>$total_encomendas_pendentes]; 
+        $data = ['total_encomenda_pendente'=>$total_encomenda_pendente,
+                'total_encomenda_processamento'=>$total_encomenda_processamento]; 
 
         
 
@@ -112,6 +114,43 @@ class Admin
     public function lista_clientes()
     {
         echo 'Lista de Clientes';
+    }
+    //==================================================================================
+    public function lista_encomenda()
+    {
+        //apresenta a lista de encomendas (usando filtro se for o caso)
+
+        //verifica se existe um filtro da query string
+        $filtros = ['pendente'=>'PENDENTE',
+                'processamento'=>'PROCESSAMENTO',
+                'cancelada'=>'CANCELADA',
+                'enviada'=>'ENVIADA',
+                'concluida'=>'CONCLUIDA'];
+
+        $filtro = '';
+        if(isset($_GET['f'])){
+            //verifica se a verialvel é uma key dos filtros
+            if(key_exists($_GET['f'], $filtros)){
+                $filtro = $filtros[$_GET['f']];
+            }
+        }
+        //carregar a lista de encomendas
+        $admin_model = new AdminModel();
+        $lista_encomenda = $admin_model->lista_encomenda($filtro);
+
+        // Store::printData($lista_encomenda);
+
+        $data = [
+            'lista_encomenda'=>$lista_encomenda,
+            'filtro'=>$filtro];
+
+        //apresenta a pagina das encomendas
+        Store::Layout_admin([
+            'admin/layouts/html_header',
+            'admin/layouts/header',
+            'admin/lista_encomenda',
+            'admin/layouts/footer',
+            'admin/layouts/html_footer'], $data);
     }
 
 }   

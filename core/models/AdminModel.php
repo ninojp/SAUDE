@@ -33,26 +33,32 @@ class AdminModel
         }
     }
     //==================================================================================
-    public function total_encomendas_pendentes()
+    public function total_encomenda_pendente()
     {
-        //vai buscar a quantidade de encomendas pendentes
+        //vai buscar a quantidade de encomendas PENDENTES
         $bd = new Database();
         $resultado = $bd->select("SELECT COUNT(*) AS total FROM encomendas WHERE status='PENDENTE' ");
         return $resultado[0]->total;
     }
 
     //==================================================================================
-    public function lista_encomendas_pendentes()
+    public function total_encomenda_processamento()
     {
-        //vai buscar a lista de encomendas pendentes
-
-        //EU MESMO QUE FIZ ESTA PARTE....
-        //buscar o histórico de encomendas do cliente = id_cliente
-    //  $parametros = [
-    //         ':id_cliente'=>$id_cliente];
-
-    //     $bd = new Database();
-    //     $resultados = $bd->select("SELECT id_encomenda, data_encomenda, codigo_encomenda, status FROM encomendas WHERE id_cliente=:id_cliente AND status='PENDENTE' ORDER BY data_encomenda DESC",$parametros);
-    //     return $resultados;
+        //vai buscar a quantidade de encomendas EM PROCESSAMENTO
+        $bd = new Database();
+        $resultado = $bd->select("SELECT COUNT(*) AS total FROM encomendas WHERE status='PROCESSAMENTO' ");
+        return $resultado[0]->total;
+    
+    }
+    //==================================================================================
+    public function lista_encomenda($filtro)
+    {
+        $bd = new Database();
+        $sql = "SELECT e.*, c.nome_completo FROM encomendas AS e LEFT JOIN clientes AS c ON e.id_cliente=c.id_cliente";
+        if($filtro != ''){
+            $sql .= " WHERE e.status = '$filtro'";
+        }
+        $sql .= " ORDER BY e.id_encomenda DESC";
+        return $bd->select($sql);
     }
 }

@@ -2,11 +2,10 @@ adicionar o PHPMail ao nosso projeto
 
 /*status da encomenda
 PENDENTE - encomenda acabou de ser registrada
-PAGO - encomenda foi paga
-EM TRATAMENTO - está a ser processada pela loja
+PROCESSAMENTO - está a ser processada pela loja
+CANCELADA -
 ENVIADA - foi enviada por correio
-CANCELADA - 
-ENTREGUE - completamente finalizada
+CONCLUIDA - completamente finalizada
 */
 ============================================================================================
 TABELA CLIENTES
