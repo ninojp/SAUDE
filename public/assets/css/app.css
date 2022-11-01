@@ -57,8 +57,19 @@
 /***********************************************************************************
 * CSS para meu BackOffice - Admin
 ************************************************************************************/
+.header_menu_admin{
+    text-decoration: none;
+    font-size: 16pt;
+    color: var(--azuEsc);
+}
 .div_menu_admin{
     background-color: var(--verdC);
-    padding: 20px;
-    height: 80vh;
+    padding: 30px;
+    margin-left: 20px;
+    height: 50vh;
+}
+.admin_menu{
+    text-decoration: none;
+    font-size: 20pt;
+    color: var(--azuEsc);
 }

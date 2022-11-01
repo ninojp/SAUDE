@@ -1,14 +1,11 @@
 <div class="div_menu_admin">
     <div class="mb-3">
-        <a href="?a=inicio"><i class="fas fa-times me-2"></i>Home</a>
+        <a class="admin_menu" href="?a=inicio"><i class="fa-solid fa-house-user"></i> Home</a>
     </div>
     <div class="mb-3">
-        <a href="?a=clientes"><i class="fas fa-times me-2"></i>Clientes</a>
+        <a class="admin_menu" href="?a=lista_cliente"><i class="fa-solid fa-users"></i> Clientes</a>
     </div>
     <div class="mb-3">
-        <a href="?a=lista_encomenda"><i class="fas fa-times me-2"></i>Ecomendas</a>
-    </div>
-    <div class="mb-3">
-        <a href="?a=editar"><i class="fas fa-times me-2"></i>Editar</a>
+        <a class="admin_menu" href="?a=lista_encomenda"><i class="fa-solid fa-truck"></i> Ecomendas</a>
     </div>
 </div>

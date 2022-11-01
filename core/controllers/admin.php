@@ -30,8 +30,6 @@ class Admin
         $data = ['total_encomenda_pendente'=>$total_encomenda_pendente,
                 'total_encomenda_processamento'=>$total_encomenda_processamento]; 
 
-        
-
         //já existe um admin logado
         Store::Layout_admin([
             'admin/layouts/html_header',
@@ -40,6 +38,9 @@ class Admin
             'admin/layouts/footer',
             'admin/layouts/html_footer'], $data);
     }
+
+    //==================================================================================
+    //  AUTENTICAÇÃO
     //==================================================================================
     public function admin_login()
     {
@@ -110,14 +111,103 @@ class Admin
         //redirecionar para o inicio
         Store::redirect('inicio',true);
     }
+
     //==================================================================================
-    public function lista_clientes()
+    //  CLIENTES
+    //==================================================================================
+    public function lista_cliente()
     {
-        echo 'Lista de Clientes';
+        //verificar se existe um Admin logado
+        if (!Store::adminLogado()) {
+            Store::redirect('inicio',true);
+            return;
+        }
+        //vai buscar a lista de clientes
+        $ADMIN = new AdminModel();
+        $clientes = $ADMIN->lista_cliente();
+
+        $data=['clientes'=>$clientes];
+
+        //apresenta a pagina da Lista de Clientes
+        Store::Layout_admin([
+            'admin/layouts/html_header',
+            'admin/layouts/header',
+            'admin/lista_cliente',
+            'admin/layouts/footer',
+            'admin/layouts/html_footer'], $data);
+
     }
+    //==================================================================================
+    public function detalhe_cliente()
+    {
+        //verificar se existe um Admin logado
+        if (!Store::adminLogado()) {
+            Store::redirect('inicio',true);
+            return;
+        }
+        //verifica se existe um id_cliente na query string
+        if(!isset($_GET['c'])){
+            Store::redirect('inicio', true);
+            return;
+        }
+        $id_cliente = Store::aesDesencriptar($_GET['c']);
+        //verifica se o id_cliente é valido
+        if(empty($id_cliente)){
+            Store::redirect('inicio', true);
+            return;
+        }
+        //buscar os dados do cliente
+        $ADMIN = new AdminModel();
+        $data = ['dados_cliente'=>$ADMIN->buscar_cliente($id_cliente),
+                'total_encomenda'=>$ADMIN->total_encomenda_cliente($id_cliente)];
+
+        //apresenta a pagina da Lista de Clientes
+        Store::Layout_admin([
+            'admin/layouts/html_header',
+            'admin/layouts/header',
+            'admin/detalhe_cliente',
+            'admin/layouts/footer',
+            'admin/layouts/html_footer'], $data);
+    }
+    //==================================================================================
+    public function cliente_historico_encomenda()
+    {
+        //verificar se existe um Admin logado
+        if (!Store::adminLogado()) {
+            Store::redirect('inicio',true);
+            return;
+        }
+        //verifica se existe o id_cliente encriptado
+        if(!isset($_GET['c'])){
+            Store::redirect('inicio',true);
+        }
+
+        //definir o id_cliente que vem encriptado
+        $id_cliente=Store::aesDesencriptar($_GET['c']);
+        //buscar os dados do cliente
+        $ADMIN = new AdminModel();
+        $data = ['lista_encomenda'=>$ADMIN->buscar_encomendas_cliente($id_cliente)];
+
+        //apresenta a pagina da Lista de Clientes
+        Store::Layout_admin([
+            'admin/layouts/html_header',
+            'admin/layouts/header',
+            'admin/lista_encomenda_cliente',
+            'admin/layouts/footer',
+            'admin/layouts/html_footer'], $data);
+
+    }
+    //==================================================================================
+    //  ENCOMENDAS
     //==================================================================================
     public function lista_encomenda()
     {
+        //verificar se existe um Admin logado
+        if (!Store::adminLogado()) {
+            Store::redirect('inicio',true);
+            return;
+        }
+
         //apresenta a lista de encomendas (usando filtro se for o caso)
 
         //verifica se existe um filtro da query string
@@ -152,5 +242,5 @@ class Admin
             'admin/layouts/footer',
             'admin/layouts/html_footer'], $data);
     }
-
+    
 }   

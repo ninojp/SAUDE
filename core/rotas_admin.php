@@ -6,8 +6,12 @@ $rotas = [
     'admin_login'=>'admin@admin_login',
     'admin_login_submit'=>'admin@admin_login_submit',
     'admin_logout'=>'admin@admin_logout',
-     //Clientes
-    'lista_clientes'=>'admin@lista_clientes',
+     
+    //Clientes
+    'lista_cliente'=>'admin@lista_cliente',
+    'detalhe_cliente'=>'admin@detalhe_cliente',
+    'cliente_historico_encomenda'=>'admin@cliente_historico_encomenda',
+    'lista_encomenda_cliente'=>'admin@lista_encomenda_cliente',
 
     //Encomendas
     'lista_encomenda'=>'admin@lista_encomenda',

@@ -33,6 +33,28 @@ class AdminModel
         }
     }
     //==================================================================================
+    //  CLIENTES
+    //==================================================================================
+    public function lista_cliente()
+    {
+        //vai buscar todos os clientes registrados na base de dados
+        $bd = new Database();
+        $resultado = $bd->select("SELECT clientes.id_cliente,clientes.email,clientes.nome_completo,clientes.telefone,clientes.activo,clientes.deleted_at, COUNT(encomendas.id_encomenda) AS total_encomenda FROM clientes LEFT JOIN encomendas ON clientes.id_cliente=encomendas.id_cliente GROUP BY clientes.id_cliente");
+        return $resultado;
+    }
+    //===================================================================================
+    public function buscar_cliente($id_cliente)
+    {
+        $parametros = ['id_cliente' => $id_cliente];
+
+        $bd = new Database();
+        $resultados = $bd->select("SELECT * FROM clientes WHERE id_cliente=:id_cliente", $parametros);
+        return $resultados[0];
+    }
+
+    //==================================================================================
+    // ENCOMENDAS    
+    //==================================================================================
     public function total_encomenda_pendente()
     {
         //vai buscar a quantidade de encomendas PENDENTES
@@ -40,7 +62,6 @@ class AdminModel
         $resultado = $bd->select("SELECT COUNT(*) AS total FROM encomendas WHERE status='PENDENTE' ");
         return $resultado[0]->total;
     }
-
     //==================================================================================
     public function total_encomenda_processamento()
     {
@@ -60,5 +81,21 @@ class AdminModel
         }
         $sql .= " ORDER BY e.id_encomenda DESC";
         return $bd->select($sql);
+    }
+    //==================================================================================
+    public function total_encomenda_cliente($id_cliente)
+    {
+        //vai buscar o total de encomendas do cliente
+        $parametros = [':id_cliente'=>$id_cliente];
+        $bd = new Database();
+        return $bd->select("SELECT COUNT(*) AS total FROM encomendas WHERE id_cliente=:id_cliente ",$parametros)[0]->total;
+    }
+    //==================================================================================
+    public function buscar_encomendas_cliente($id_cliente)
+    {
+        //vai buscar todas as encomendas do cliente indicado
+        $parametros = [':id_cliente'=>$id_cliente];
+        $bd = new Database();
+        return $bd->select("SELECT * FROM encomendas WHERE id_cliente=:id_cliente ",$parametros);
     }
 }
