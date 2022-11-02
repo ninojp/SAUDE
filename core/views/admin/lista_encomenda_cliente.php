@@ -6,14 +6,21 @@
         <div class="col-md-10">
             <div class="row">
                 <h3 class="text-center">Histórico de todas as encomendas deste cliente</h3>
-                <div class="col-5 text-center">
-                    <p>Dados do cliente</p>
+                <div class="row">
+                    <div class="col-4 fw-bold">
+                        <p>Nome: <?= $cliente->nome_completo ;?></p>
+                    </div>
+                    <div class="col-4 fw-bold">
+                        <p>Email: <?= $cliente->email ;?></p>
+                    </div>
+                    <div class="col-4 fw-bold">
+                        <p>Telefone: <?= $cliente->telefone ;?></p>
+                    </div>
+                    <hr>
                 </div>
-                <hr>
                 <?php if (count($lista_encomenda) == 0) : ?>
                     <p>
-                        <hr>Não existe encomendas registradas
-                        <hr>
+                        <hr>Não existe encomendas registradas<hr>
                     </p>
                 <?php else : ?>
                     <table class="table table-striped" id="lista-encomenda-cliente">

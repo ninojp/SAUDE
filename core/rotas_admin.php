@@ -15,6 +15,7 @@ $rotas = [
 
     //Encomendas
     'lista_encomenda'=>'admin@lista_encomenda',
+    'detalhe_encomenda'=>'admin@detalhe_encomenda',
 ];
 
 //Define uma ação por default

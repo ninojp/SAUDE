@@ -1,3 +1,5 @@
+<?php
+use core\classes\Store;?>
 
 <div class="container-fluid">
     <div class="row my-3 justify-content-center">
@@ -57,7 +59,7 @@ if(isset($_GET['f'])){
                                 <td><?= $encomenda->nome_completo; ?></td>
                                 <td><?= $encomenda->email; ?></td>
                                 <td><?= $encomenda->telefone; ?></td>
-                                <td><?= $encomenda->status; ?></td>
+                                <td><a href="?a=detalhe_encomenda&e=<?=Store::aesEcncriptar($encomenda->id_encomenda)?>"><?= $encomenda->status;?></a></td>
                                 <?php $atualizada=DateTime::createFromFormat('Y-m-d H:i:s',$encomenda->updated_at);?>
                                 <td><?= $atualizada->format('d-m-Y H:i').'h';?></td>
                             </tr>

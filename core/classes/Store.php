@@ -81,7 +81,7 @@ class Store
         
     }
     //=================================================================================
-    public static function printData($data)
+    public static function printData($data, $die=true)
     {
         if(is_array($data) || is_object($data)){
             echo '<pre>';
@@ -90,7 +90,10 @@ class Store
             echo'<pre>';
             echo $data;
         }
-        die('<br>Terminado!');
+        if($die){
+            die('<br>Terminado!');
+        }
+        
     }
     //=================================================================================
     //  ENCRIPTAR

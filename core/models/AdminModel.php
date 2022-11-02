@@ -98,4 +98,22 @@ class AdminModel
         $bd = new Database();
         return $bd->select("SELECT * FROM encomendas WHERE id_cliente=:id_cliente ",$parametros);
     }
+    //==================================================================================
+    public function buscar_detalhe_encomenda($id_encomenda)
+    {
+        //vai buscar os datalhes de uma encomenda
+        $bd = new Database();
+
+        $parametros = [':id_encomenda'=>$id_encomenda];
+        //buscar os dados da encomenda
+        $dados_encomenda = $bd->select("SELECT * FROM encomendas WHERE id_encomenda=:id_encomenda",$parametros);
+        
+        //lista de produtos da encomenda
+        $lista_produtos = $bd->select("SELECT * FROM encomenda_produto WHERE id_encomenda=:id_encomenda", $parametros);
+        
+        return ['encomenda'=>$dados_encomenda[0],
+                'lista_produtos'=>$lista_produtos];
+        
+
+    }
 }

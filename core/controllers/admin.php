@@ -186,7 +186,8 @@ class Admin
         $id_cliente=Store::aesDesencriptar($_GET['c']);
         //buscar os dados do cliente
         $ADMIN = new AdminModel();
-        $data = ['lista_encomenda'=>$ADMIN->buscar_encomendas_cliente($id_cliente)];
+        $data = ['cliente'=>$ADMIN->buscar_cliente($id_cliente),
+                'lista_encomenda'=>$ADMIN->buscar_encomendas_cliente($id_cliente)];
 
         //apresenta a pagina da Lista de Clientes
         Store::Layout_admin([
@@ -241,6 +242,41 @@ class Admin
             'admin/lista_encomenda',
             'admin/layouts/footer',
             'admin/layouts/html_footer'], $data);
+    }
+    //==================================================================================
+    public function detalhe_encomenda()
+    {
+        //verificar se existe um Admin logado
+        if (!Store::adminLogado()) {
+            Store::redirect('inicio',true);
+            return;
+        }
+        //buscar o id_encomenda
+        $id_encomenda = null;
+        if(isset($_GET['e'])){
+            $id_encomenda = Store::aesDesencriptar($_GET['e']);
+        }
+        if(gettype($id_encomenda)!='string'){
+            Store::redirect('inicio',true);
+            return;
+            
+        }
+
+        //carregar os dados da encoemnda selecionada
+        $admin_model = new AdminModel();
+        $encomenda = $admin_model->buscar_detalhe_encomenda($id_encomenda);
+
+        //apresentar os dados por forma a poder ver os detalhes e alterar o seu Status
+        $data = $encomenda;
+        Store::Layout_admin([
+            'admin/layouts/html_header',
+            'admin/layouts/header',
+            'admin/encomenda_detalhe',
+            'admin/layouts/footer',
+            'admin/layouts/html_footer'], $data);
+
+        //incorporar neste quadro o mcanismo de produçao de documentos (PDF)
+
     }
     
 }   
