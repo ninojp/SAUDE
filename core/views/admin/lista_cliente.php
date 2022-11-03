@@ -38,7 +38,7 @@ use core\classes\Store;?>
                                     <?php if($cliente->total_encomenda==0): ?>
                                         <span class=""><i class="text-danger fa-solid fa-circle-xmark"></i></span>
                                     <?php else: ?>
-                                        <?= $cliente->total_encomenda;?>
+                                        <a href="?a=lista_encomenda&c=<?= Store::aesEcncriptar($cliente->id_cliente);?>"><?= $cliente->total_encomenda;?></a>
                                     <?php endif; ?>
                                     </td>
                                 <td class="text-center">

@@ -19,14 +19,19 @@ use core\classes\Store; ?>
             </div><hr>
             <div class="row">
                     <h3>Detalhes da Encomenda</h3>
-                    <div class="col-3">Codigo Encomenda:<br><span class="fw-bold"><?=$encomenda->codigo_encomenda;?></span></div>
-                    <div class="col-3">Status:<br>
+                    <div class="col-2">Status:<br>
                     <button type="button" class="header_menu_admin badge bg-info" onclick="apresentarModal()"><?=$encomenda->status;?></button>
                     </div>
+                    <div class="col-1">imprimir:<br>
+                    <?php if($encomenda->status == 'PROCESSAMENTO'):?>
+                        <a class="btn btn-sm btn-outline-info" href=""> PDF</a>
+                    <?php endif; ?>
+                    </div>
+                    <div class="col-2">Codigo Encomenda:<br><span class="fw-bold"><?=$encomenda->codigo_encomenda;?></span></div>
                     <?php $data_encomenda=DateTime::createFromFormat('Y-m-d H:i:s',$encomenda->data_encomenda);?>
                     <div class="col-3">Data Encomenda:<br><span class="fw-bold">
                         <?= $data_encomenda->format('d-m-Y H:i').'h';?></span></div>
-                    <div class="col-3">Mensagem:<br><span class="fw-bold"><?=$encomenda->mensagem;?></span></div>
+                    <div class="col-4">Mensagem:<br><span class="fw-bold"><?=$encomenda->mensagem;?></span></div>
             </div><hr>
             <div class="row">
                     <h3>Detalhes dos Produtos da Encomenda</h3>

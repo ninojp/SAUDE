@@ -24,3 +24,12 @@ define('MAIL_HOST', 'smtp.gmail.com');
 define('MAIL_FROM', 'meuemailparablog@gmail.com');
 define('MAIL_PASS', 'dnixpmkkzyyysodx');
 define('MAIL_PORT', '587');
+
+//=================================================================================================
+// USUARIOS ATUAIS
+// admin@admin.com          -> admin        -> 123456 (acho eu)
+// meu.sem@gmail.com        -> Edenilson JP -> 123456
+// teste@sem.com            -> semnome      -> 123
+// teste2@sem.com           -> teste nome   -> 123
+// ninocriptocoin@gmail.com -> Nino JP      -> 123456
+//=================================================================================================

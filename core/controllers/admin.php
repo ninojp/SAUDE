@@ -226,9 +226,15 @@ class Admin
                 $filtro = $filtros[$_GET['f']];
             }
         }
+        $id_cliente=null;
+        //vai buscar o id_cliente se existir na query string
+        if(isset($_GET['c'])){
+            $id_cliente=Store::aesDesencriptar($_GET['c']);
+        }
+
         //carregar a lista de encomendas
         $admin_model = new AdminModel();
-        $lista_encomenda = $admin_model->lista_encomenda($filtro);
+        $lista_encomenda = $admin_model->lista_encomenda($filtro, $id_cliente);
 
         // Store::printData($lista_encomenda);
 
@@ -303,7 +309,6 @@ class Admin
             return;
             
         }
-
         //bsucar o novo estado(status)
         $estado=null;
         if(isset($_GET['s'])){
@@ -313,7 +318,6 @@ class Admin
             Store::redirect('inicio',true);
             return;
         }
-
         //regras de negócio para gerir a encomenda (novo estado)
 
         //atualizar o estado da encomenda na base de dados
@@ -340,6 +344,8 @@ class Admin
                 $this->operacao_notificar_cliente_mudanca_estado($id_encomenda);
                 break;
         }
+        //redireciona para a pagina da própria encomenda
+        Store::redirect('detalhe_encomenda&e='.$_GET['e'], true);
     }
 
     //==================================================================================

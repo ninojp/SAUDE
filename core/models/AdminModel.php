@@ -72,12 +72,15 @@ class AdminModel
     
     }
     //==================================================================================
-    public function lista_encomenda($filtro)
+    public function lista_encomenda($filtro, $id_cliente)
     {
         $bd = new Database();
-        $sql = "SELECT e.*, c.nome_completo FROM encomendas AS e LEFT JOIN clientes AS c ON e.id_cliente=c.id_cliente";
+        $sql = "SELECT e.*, c.nome_completo FROM encomendas AS e LEFT JOIN clientes AS c ON e.id_cliente=c.id_cliente WHERE 1";
         if($filtro != ''){
-            $sql .= " WHERE e.status = '$filtro'";
+            $sql .= " AND e.status = '$filtro'";
+        }
+        if(!empty($id_cliente)){
+            $sql .= " AND e.id_cliente = '$id_cliente'";
         }
         $sql .= " ORDER BY e.id_encomenda DESC";
         return $bd->select($sql);
