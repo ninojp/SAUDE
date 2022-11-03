@@ -5,6 +5,7 @@ namespace core\controllers;
 //indicação dos NAMESPACEs das minhas classes do CORE:
 use core\classes\Database;
 use core\classes\EnviarEmail;
+use core\classes\PDF;
 use core\classes\Store;
 use core\models\Clientes;
 use core\models\Encomendas;
@@ -489,12 +490,6 @@ class Main
     {
         //simulação do webhook do getaway de pagamento
 
-/*
-verificar se vem o código da encomenda
-verificar se a encomenda com o código indicado está pendente
-alterar o estado da encomenda de pendente para em processamento
-
-*/
         //verificar se o código da encomenda veio indicado
         $codigo_encomenda = '';
         if(!isset($_GET['cod'])){
@@ -507,4 +502,26 @@ alterar o estado da encomenda de pendente para em processamento
         $resultado = $encomenda->efetuar_pagamento($codigo_encomenda);
         echo (int)$resultado;
     }
+    //============================================================================
+    public function criar_pdf()
+    {   
+        //getcwd() -> usado para indicar o endereço atual
+        // die(getcwd());
+
+        $pdf = new PDF();
+        //definir um template de fundo
+        $pdf->set_template(getcwd().'/assets/templates_pdf/Template_teste.pdf');
+
+        $texto="<div style='color:green;font-size:30pt;text-align:center;'>Titulo de teste: </div>";
+        $texto .="<div style='color:red;font-size:12pt;text-align:right;position:absolute;top:400px;width:50%;padding:50px;'>Aqui vai um texte enormemente <br>extenso apenas para testes ......<br>Texto de teste... </div>";
+
+        $pdf->escrever($texto);
+      
+
+
+        $pdf->apresentar_pdf();
+        //usar os métodos do objeto $pdf para constrir o HTML e fazer o output
+
+    }
+
 }

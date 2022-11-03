@@ -24,7 +24,7 @@ use core\classes\Store; ?>
                     </div>
                     <div class="col-1">imprimir:<br>
                     <?php if($encomenda->status == 'PROCESSAMENTO'):?>
-                        <a class="btn btn-sm btn-outline-info" href=""> PDF</a>
+                        <a class="btn btn-sm btn-outline-info" href="?a=criar_pdf_encomenda&e=<?=?>"> PDF</a>
                     <?php endif; ?>
                     </div>
                     <div class="col-2">Codigo Encomenda:<br><span class="fw-bold"><?=$encomenda->codigo_encomenda;?></span></div>
