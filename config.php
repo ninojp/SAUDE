@@ -5,6 +5,9 @@ define('APP_VERSION', '0.1.0');
 //URL atual do meu site
 define('BASE_URL','https://localhost/SAUDE/public/');
 
+// Status das encomendas
+define('STATUS',  ['PENDENTE','PROCESSAMENTO','CANCELADA','ENVIADA','CONCLUIDA']);
+
 //MYSQL
 define('MYSQL_SERVER', 'localhost');
 define('MYSQL_DATABASE', 'db_saude');

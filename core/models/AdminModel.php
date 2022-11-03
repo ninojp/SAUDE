@@ -103,17 +103,27 @@ class AdminModel
     {
         //vai buscar os datalhes de uma encomenda
         $bd = new Database();
-
         $parametros = [':id_encomenda'=>$id_encomenda];
+        
         //buscar os dados da encomenda
-        $dados_encomenda = $bd->select("SELECT * FROM encomendas WHERE id_encomenda=:id_encomenda",$parametros);
+        $dados_encomenda = $bd->select("SELECT clientes.nome_completo, encomendas.* FROM clientes,encomendas WHERE encomendas.id_encomenda=:id_encomenda AND encomendas.id_cliente=clientes.id_cliente ",$parametros);
         
         //lista de produtos da encomenda
         $lista_produtos = $bd->select("SELECT * FROM encomenda_produto WHERE id_encomenda=:id_encomenda", $parametros);
-        
+
         return ['encomenda'=>$dados_encomenda[0],
                 'lista_produtos'=>$lista_produtos];
         
 
     }
+    //==================================================================================
+    public function atualizar_status_encomenda($id_encomenda, $estado)
+    {
+        //atualizar o estado da encomenda
+        $bd = new Database();
+        $parametros = [':id_encomenda'=>$id_encomenda, ':status'=>$estado];
+
+        $bd->update("UPDATE encomendas SET status=:status, updated_at=NOW() WHERE id_encomenda=:id_encomenda ", $parametros);
+    }
+
 }

@@ -198,6 +198,7 @@ class Admin
             'admin/layouts/html_footer'], $data);
 
     }
+
     //==================================================================================
     //  ENCOMENDAS
     //==================================================================================
@@ -266,8 +267,15 @@ class Admin
         $admin_model = new AdminModel();
         $encomenda = $admin_model->buscar_detalhe_encomenda($id_encomenda);
 
+        //EU FIZ DESTA FORMA - BUSCAR NOME CLIENTE + ENCOMENDAS DO MESMO
+        // $td_encomenda = ['d_cliente'=>$admin_model->buscar_cliente($encomenda['encomenda']->id_cliente),'d_encomenda'=> $encomenda];
+        //MAS A FORMA DO PROFESSOR ERA BEM MAIS SIMPLES, MODIFICANDO APENAS LA NA QUERY(buscar_detalhe_encomenda)
+        // Store::printData($td_encomenda);
+        // die('Até Aqui!');
+       
         //apresentar os dados por forma a poder ver os detalhes e alterar o seu Status
-        $data = $encomenda;
+               
+        $data=$encomenda;
         Store::Layout_admin([
             'admin/layouts/html_header',
             'admin/layouts/header',
@@ -276,7 +284,75 @@ class Admin
             'admin/layouts/html_footer'], $data);
 
         //incorporar neste quadro o mcanismo de produçao de documentos (PDF)
+    }
+    //==================================================================================
+    public function encomenda_alterar_estado()
+    {
+        //verificar se existe um Admin logado
+        if (!Store::adminLogado()) {
+            Store::redirect('inicio',true);
+            return;
+        }
+        //buscar o id_encomenda
+        $id_encomenda = null;
+        if(isset($_GET['e'])){
+            $id_encomenda = Store::aesDesencriptar($_GET['e']);
+        }
+        if(gettype($id_encomenda)!='string'){
+            Store::redirect('inicio',true);
+            return;
+            
+        }
+
+        //bsucar o novo estado(status)
+        $estado=null;
+        if(isset($_GET['s'])){
+            $estado=$_GET['s'];
+        }
+        if(!in_array($estado, STATUS)){
+            Store::redirect('inicio',true);
+            return;
+        }
+
+        //regras de negócio para gerir a encomenda (novo estado)
+
+        //atualizar o estado da encomenda na base de dados
+        $admin_model = new AdminModel();
+        $admin_model->atualizar_status_encomenda($id_encomenda, $estado);
+        //executar operação baseadas no novo estado
+
+        //carregar os dados da encomenda selecionada
+        switch ($estado) {
+            case 'PENDENTE':
+                $this->operacao_notificar_cliente_mudanca_estado($id_encomenda);
+                break;
+            case 'PROCESSAMENTO':
+                # sem ações no momento
+                break;
+            case 'CANCELADA':
+                $this->operacao_notificar_cliente_mudanca_estado($id_encomenda);
+                break;
+            case 'ENVIADA':
+                # Enviar um email com a notificação ao cliente sobre o envio da encomenda
+                $this->operacao_enviar_email_encomenda_enviada($id_encomenda);
+                break;
+            case 'CONCLUIDA':
+                $this->operacao_notificar_cliente_mudanca_estado($id_encomenda);
+                break;
+        }
+    }
+
+    //==================================================================================
+    // OPERAÇÕES APÓS MUDANÇA DE ESTADO
+    //==================================================================================
+    public function operacao_notificar_cliente_mudanca_estado($id_encomenda)
+    {
+        //vai enviar um email para o cliente notificando que a encomenda sofreu alterações
+    }
+    //==================================================================================
+    private function operacao_enviar_email_encomenda_enviada($id_encomenda)
+    {
+        //executar as operações para enviar email ao cliente
 
     }
-    
 }   
