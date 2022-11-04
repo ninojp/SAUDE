@@ -516,8 +516,6 @@ class Main
         $texto .="<div style='color:red;font-size:12pt;text-align:right;position:absolute;top:400px;width:50%;padding:50px;'>Aqui vai um texte enormemente <br>extenso apenas para testes ......<br>Texto de teste... </div>";
 
         $pdf->escrever($texto);
-      
-
 
         $pdf->apresentar_pdf();
         //usar os métodos do objeto $pdf para constrir o HTML e fazer o output

@@ -59,11 +59,11 @@ class PDF
     {
         //escreve texto no documento
         // $this->html .= "<div style='color:green;font-size:30pt'>Texto de teste: </div>";
-        $this->html .= "$texto";
+        $this->html .= $texto;
     }
     //===============================================================================================
     // métodos para definir posição e dimanção do texto
-    // NO VIDEO 99 e 100 DA PLAYLIST WEBSTORE
+    // NO VIDEO 99 e 100 DA PLAYLIST WEBSTORE - agora já entendi pq KKKKKKKKKKKKKKKKKKK
     //  eu não construi TODOS os metodos ensinados - vou PULAR por enquanto achei desnecessário
     //===============================================================================================
     public function posicao($x, $y)

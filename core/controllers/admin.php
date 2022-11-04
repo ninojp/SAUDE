@@ -5,6 +5,7 @@ namespace core\controllers;
 //indicação dos NAMESPACEs das minhas classes do CORE:
 use core\classes\Database;
 use core\classes\EnviarEmail;
+use core\classes\PDF;
 use core\classes\Store;
 use core\models\AdminModel;
 
@@ -307,7 +308,6 @@ class Admin
         if(gettype($id_encomenda)!='string'){
             Store::redirect('inicio',true);
             return;
-            
         }
         //bsucar o novo estado(status)
         $estado=null;
@@ -349,7 +349,7 @@ class Admin
     }
 
     //==================================================================================
-    // OPERAÇÕES APÓS MUDANÇA DE ESTADO
+    // OPERAÇÕES APÓS MUDANÇA DE ESTADO DA ENCOMENDA
     //==================================================================================
     public function operacao_notificar_cliente_mudanca_estado($id_encomenda)
     {
@@ -360,5 +360,91 @@ class Admin
     {
         //executar as operações para enviar email ao cliente
 
+    }
+    //==================================================================================
+    public function criar_pdf_encomenda()
+    {
+        //verificar se existe um Admin logado
+        if (!Store::adminLogado()) {
+            Store::redirect('inicio',true);
+            return;
+        }
+        //buscar o id_encomenda
+        $id_encomenda = null;
+        if(isset($_GET['e'])){
+            $id_encomenda = Store::aesDesencriptar($_GET['e']);
+        }
+        if(gettype($id_encomenda)!='string'){
+            Store::redirect('inicio',true);
+            return;
+        }
+        //vai buscar todos os dados da encomenda
+        $admin_model = new AdminModel();
+        $encomenda = $admin_model->buscar_detalhe_encomenda($id_encomenda);
+        foreach($encomenda['lista_produtos'] as $produto);
+        
+        //buscar dados do cliente
+        // Store::printData($encomenda);
+
+        //criar o PDF com os detalhes da encomenda
+        $pdf = new PDF();
+        $pdf->set_template(getcwd().'/assets/templates_pdf/templat.pdf');
+
+        //bom agora faz sentido os videos 99 - 100 da playlist kkkkk
+        //mas bora improvisar... DEU CERTO kkkkk
+        $texto = "<style>
+        #div_cliente {
+            position: absolute;
+            top: 130px;
+            left: 100px;
+            color: #fff;
+        }
+        #div_encomenda{
+            position: absolute;
+            top: 350px;
+            left: 100px;
+        }
+        #div_produto{
+            position: absolute;
+            top: 650px;
+            left: 100px;
+        }
+        .span_desc {
+            font-size: 20pt;
+            font-weight: 700;
+        }
+        .p_texto {
+            font-size: 14pt;
+        }
+    </style>";
+        $texto .= "<div id='div_cliente'>
+        <p class='p_texto'>
+            <span class='span_desc'>Nome Cliente:</span> ".$encomenda['encomenda']->nome_completo."<br>
+            <span class='span_desc'>Email:</span> ".$encomenda['encomenda']->email."<br>
+            <span class='span_desc'>Telefone:</span> ".$encomenda['encomenda']->telefone."<br>
+            <span class='span_desc'>Cidade:</span> ".$encomenda['encomenda']->cidade."<br>
+            <span class='span_desc'>Endereço:</span> ".$encomenda['encomenda']->email."<br>
+        </p>
+    </div>
+    <div id='div_encomenda'>
+        <p class='p_texto'>
+        <span class='span_desc'>Dados da Encomenda:</span><br>
+        <span class='span_desc'>Codigo da Encomenda:</span> ".$encomenda['encomenda']->codigo_encomenda."<br>
+        <span class='span_desc'>Data da Encomenda:</span> ".$encomenda['encomenda']->data_encomenda."<br>
+        <span class='span_desc'>Estado Atual da Encomenda:</span> ".$encomenda['encomenda']->status."<br>
+        <span class='span_desc'>Mensagem:</span> ".$encomenda['encomenda']->mensagem."<br>
+        </p>
+    </div>
+    <div id='div_produto'>
+        <p class='p_texto'>
+        <span class='span_desc'>Dados dos produtos:</span> ".$produto->designacao_produto."<br>
+        <span class='span_desc'>Quantidade:</span> ".$produto->quantidade."<br>
+        <span class='span_desc'>Preço por Unidade:</span> ".$produto->preco_unidade."<br>
+        <span class='span_desc'>Preço da Total:</span><br>
+        </p>
+    </div>";
+        $pdf->escrever($texto);
+
+        $pdf->apresentar_pdf();
     }
 }   

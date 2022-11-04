@@ -116,8 +116,6 @@ class AdminModel
 
         return ['encomenda'=>$dados_encomenda[0],
                 'lista_produtos'=>$lista_produtos];
-        
-
     }
     //==================================================================================
     public function atualizar_status_encomenda($id_encomenda, $estado)
