@@ -387,64 +387,123 @@ class Admin
         // Store::printData($encomenda);
 
         //criar o PDF com os detalhes da encomenda
-        $pdf = new PDF();
+        $pdf = new PDF(false);
         $pdf->set_template(getcwd().'/assets/templates_pdf/templat.pdf');
-
-        //bom agora faz sentido os videos 99 - 100 da playlist kkkkk
-        //mas bora improvisar... DEU CERTO kkkkk
-        $texto = "<style>
-        #div_cliente {
-            position: absolute;
-            top: 130px;
-            left: 100px;
-            color: #fff;
-        }
-        #div_encomenda{
-            position: absolute;
-            top: 350px;
-            left: 100px;
-        }
-        #div_produto{
-            position: absolute;
-            top: 650px;
-            left: 100px;
-        }
-        .span_desc {
-            font-size: 20pt;
-            font-weight: 700;
-        }
-        .p_texto {
-            font-size: 14pt;
-        }
-    </style>";
-        $texto .= "<div id='div_cliente'>
-        <p class='p_texto'>
-            <span class='span_desc'>Nome Cliente:</span> ".$encomenda['encomenda']->nome_completo."<br>
-            <span class='span_desc'>Email:</span> ".$encomenda['encomenda']->email."<br>
-            <span class='span_desc'>Telefone:</span> ".$encomenda['encomenda']->telefone."<br>
-            <span class='span_desc'>Cidade:</span> ".$encomenda['encomenda']->cidade."<br>
-            <span class='span_desc'>Endereço:</span> ".$encomenda['encomenda']->email."<br>
-        </p>
-    </div>
-    <div id='div_encomenda'>
-        <p class='p_texto'>
-        <span class='span_desc'>Dados da Encomenda:</span><br>
-        <span class='span_desc'>Codigo da Encomenda:</span> ".$encomenda['encomenda']->codigo_encomenda."<br>
-        <span class='span_desc'>Data da Encomenda:</span> ".$encomenda['encomenda']->data_encomenda."<br>
-        <span class='span_desc'>Estado Atual da Encomenda:</span> ".$encomenda['encomenda']->status."<br>
-        <span class='span_desc'>Mensagem:</span> ".$encomenda['encomenda']->mensagem."<br>
-        </p>
-    </div>
-    <div id='div_produto'>
-        <p class='p_texto'>
-        <span class='span_desc'>Dados dos produtos:</span> ".$produto->designacao_produto."<br>
-        <span class='span_desc'>Quantidade:</span> ".$produto->quantidade."<br>
-        <span class='span_desc'>Preço por Unidade:</span> ".$produto->preco_unidade."<br>
-        <span class='span_desc'>Preço da Total:</span><br>
-        </p>
-    </div>";
-        $pdf->escrever($texto);
+//--------------------------------------------------------------------------------------------------
+        //mas bora improvisar... DEU CERTO USEI MAS DEPOIS DE CRIAR AS DEFINIÇÕES ORIGINAIS DA PLAYLIST DO PROFESSOR FOI NECESSÁRIO COMENTAR TUDO
+        // $texto = "<style>#div_cliente { position: absolute; top: 130px; left: 100px; color: #fff;}
+        // #div_encomenda{ position: absolute; top: 350px; left: 100px;}
+        // #div_produto{ position: absolute; top: 650px; left: 100px;}
+        // .span_desc { font-size: 20pt; font-weight: 700; }
+        // .p_texto { font-size: 14pt; }
+        // </style>";
+        // $texto .= "<div id='div_cliente'><p class='p_texto'>
+        //     <span class='span_desc'>Nome Cliente:</span> ".$encomenda['encomenda']->nome_completo."<br>
+        //     <span class='span_desc'>Email:</span> ".$encomenda['encomenda']->email."<br>
+        //     <span class='span_desc'>Telefone:</span> ".$encomenda['encomenda']->telefone."<br>
+        //     <span class='span_desc'>Cidade:</span> ".$encomenda['encomenda']->cidade."<br>
+        //     <span class='span_desc'>Endereço:</span> ".$encomenda['encomenda']->email."<br>
+        // </p></div><div id='div_encomenda'><p class='p_texto'>
+        // <span class='span_desc'>Dados da Encomenda:</span><br>
+        // <span class='span_desc'>Codigo da Encomenda:</span> ".$encomenda['encomenda']->codigo_encomenda."<br>
+        // <span class='span_desc'>Data da Encomenda:</span> ".$encomenda['encomenda']->data_encomenda."<br>
+        // <span class='span_desc'>Estado Atual da Encomenda:</span> ".$encomenda['encomenda']->status."<br>
+        // <span class='span_desc'>Mensagem:</span> ".$encomenda['encomenda']->mensagem."<br>
+        // </p></div><div id='div_produto'><p class='p_texto'>
+        // <span class='span_desc'>Dados dos produtos:</span> ".$produto->designacao_produto."<br>
+        // <span class='span_desc'>Quantidade:</span> ".$produto->quantidade."<br>
+        // <span class='span_desc'>Preço por Unidade:</span> ".$produto->preco_unidade."<br>
+        // <span class='span_desc'>Preço da Total:</span><br>
+        // </p></div>";
+//--------------------------------------------------------------------------------------------------
+        //titulo - Dados do Cliente:
+        $pdf->posicao_dimensao(150, 125, 180, 25);
+        $pdf->cor_text('#000');
+        $pdf->text_align('center');
+        $pdf->font_size('24pt');
+        $pdf->letra_espessura('bold');
+        $pdf->escrever('Dados do Cliente:');
+        //campos de dados do cliente
+        $pdf->posicao_dimensao(100, 150, 80, 100);
+        $pdf->cor_text('#000');
+        $pdf->text_align('left');
+        $pdf->font_size('18pt');
+        $pdf->letra_espessura('bold');
+        $pdf->escrever('Nome: <br>Email: <br>Telefone: <br>Endereço: <br>Cidade: <br>');
+        //informações do cliente
+        $pdf->posicao_dimensao(180, 150, 300, 100);
+        $pdf->cor_text('#000');
+        $pdf->font_size('14pt');
+        $pdf->letra_espessura('normal');
+        $pdf->text_align('left');
+        $pdf->escrever($encomenda['encomenda']->nome_completo.'<br>'.$encomenda['encomenda']->email.'<br>'.$encomenda['encomenda']->telefone.'<br>'.$encomenda['encomenda']->endereco.'<br>'.$encomenda['encomenda']->cidade.'<br>');
+      
+        //titulo - Dados da Encomenda:
+        $pdf->posicao_dimensao(150, 350, 180, 25);
+        $pdf->cor_text('#000');
+        $pdf->text_align('center');
+        $pdf->font_size('24pt');
+        $pdf->letra_espessura('bold');
+        $pdf->escrever('Dados da Encomenda:');
+        //campos de dados da Encomenda
+        $pdf->posicao_dimensao(100, 375, 80, 100);
+        $pdf->cor_text('#000');
+        $pdf->text_align('left');
+        $pdf->font_size('18pt');
+        $pdf->letra_espessura('bold');
+        $pdf->escrever('Data: <br>Codigo: <br>Estado: <br>MSG: <br>');
+        //informações da Encomenda
+        $pdf->posicao_dimensao(180, 375, 300, 100);
+        $pdf->cor_text('#000');
+        $pdf->font_size('14pt');
+        $pdf->letra_espessura('normal');
+        $pdf->text_align('left');
+        $pdf->escrever($encomenda['encomenda']->data_encomenda.'<br>'.$encomenda['encomenda']->codigo_encomenda.'<br>'.$encomenda['encomenda']->status.'<br>'.$encomenda['encomenda']->mensagem.'<br>');
 
         $pdf->apresentar_pdf();
+    }
+
+    //============================================================================
+    //  TESTES DE CRIAÇÃO DE PDF
+    //============================================================================
+    public function teste_criar_pdf()
+    {   
+        //getcwd() -> usado para indicar o endereço atual
+        // die(getcwd());
+
+        $pdf = new PDF();
+        //definir um template de fundo
+        $pdf->set_template(getcwd().'/assets/templates_pdf/Template.pdf');
+
+        //posicionamento do texto
+        $pdf->posicao_dimensao(100, 150, 300, 50);
+        $pdf->cor_text('#000');
+        $pdf->cor_fundo('rgb(240,240,240)');
+        $pdf->text_align('left');
+        // $pdf->font_size('24px');
+        //método(escrever()) do objeto ($pdf) para construir o HTML para fazer o output como pdf
+        $pdf->escrever('Texto apenas');
+
+        $pdf->posicao_dimensao(450, 350, 300, 100);
+        $pdf->cor_text('white');
+        $pdf->cor_fundo('blue');
+        $pdf->text_align('center');
+        // $pdf->set_font_family('Times New Roman');
+        $pdf->font_size('14pt');
+        $pdf->letra_espessura('bold');
+        $pdf->escrever('Segundo Texto apenas para testes<br> Este deve ser ukm texto um pouco maior');
+
+        //método do objeto $pdf que recebe o HTML e faz a conversão para o output em pdf  
+        $pdf->apresentar_pdf();
+        
+        //TETES... só aparece se desativar o metodo de converção para PDF
+        // $data= ['texto'=>$texto];
+        // Store::Layout_admin([
+        //     'admin/layouts/html_header',
+        //     'admin/layouts/header',
+        //     'admin/layouts/admin_menu',
+        //     'admin/pdf_teste',
+        //     'admin/layouts/footer',
+        //     'admin/layouts/html_footer'], $data);
     }
 }   

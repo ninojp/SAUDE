@@ -22,11 +22,11 @@ use core\classes\Store; ?>
                     <div class="col-2">Status:<br>
                     <button type="button" class="header_menu_admin badge bg-info" onclick="apresentarModal()"><?=$encomenda->status;?></button>
                     </div>
-                    <div class="col-1">imprimir:<br>
                     <?php if($encomenda->status == 'PROCESSAMENTO'):?>
-                        <a class="btn btn-sm btn-outline-info" href="?a=criar_pdf_encomenda&e=<?=Store::aesEcncriptar($encomenda->id_encomenda)?>">PDF</a>
+                        <div class="col-1">imprimir:<br>
+                            <a class="btn btn-sm btn-outline-info" href="?a=criar_pdf_encomenda&e=<?=Store::aesEcncriptar($encomenda->id_encomenda)?>">PDF</a>
+                        </div>
                     <?php endif; ?>
-                    </div>
                     <div class="col-2">Codigo Encomenda:<br><span class="fw-bold"><?=$encomenda->codigo_encomenda;?></span></div>
                     <?php $data_encomenda=DateTime::createFromFormat('Y-m-d H:i:s',$encomenda->data_encomenda);?>
                     <div class="col-3">Data Encomenda:<br><span class="fw-bold">

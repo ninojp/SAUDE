@@ -1,6 +1,5 @@
 <div class="container-fluid">
     <div class="row my-3 justify-content-center">
-        
         <div class="col-md-2">
             <?php include_once(__DIR__.'/layouts/admin_menu.php'); ?>
         </div>
@@ -24,6 +23,7 @@
                     <span class="me-3">Encomendas em processamento: <strong><?= $total_encomenda_processamento ?></strong></span><a href="?a=lista_encomenda&f=processamento">Ver<i class="far fa-eye ms-1"></i></a><hr>
                 </div>
             <?php endif; ?>
+            
         </div>
     </div>
 </div>

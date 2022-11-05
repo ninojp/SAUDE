@@ -17,7 +17,10 @@ $rotas = [
     'lista_encomenda'=>'admin@lista_encomenda',
     'detalhe_encomenda'=>'admin@detalhe_encomenda',
     'encomenda_alterar_estado'=>'admin@encomenda_alterar_estado',
-    'criar_pdf_encomenda'=>'admin@criar_pdf_encomenda'
+    'criar_pdf_encomenda'=>'admin@criar_pdf_encomenda',
+
+    //TEMP testes de criação de pdf
+    'teste_criar_pdf'=>'admin@teste_criar_pdf'
 ];
 
 //Define uma ação por default

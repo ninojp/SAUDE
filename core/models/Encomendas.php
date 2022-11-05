@@ -97,7 +97,7 @@ class Encomendas
         }
 
         //efetuar a alteração do estado(status) da encomenda indicada
-        $bd->update("UPDATE encomendas SET status='EM PROCESSAMENTO', updated_at=NOW() WHERE codigo_encomenda=:codigo_encomenda ",$parametros);
+        $bd->update("UPDATE encomendas SET status='PROCESSAMENTO', updated_at=NOW() WHERE codigo_encomenda=:codigo_encomenda ",$parametros);
         return true;
     }
 }

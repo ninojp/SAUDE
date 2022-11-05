@@ -37,8 +37,6 @@ $rotas = [
     //pagamento
     'pagamento'=>'main@pagamento',
 
-    //TEMP
-    'pdf'=>'main@criar_pdf'
 ];
 
 //Define uma ação por default

@@ -15,24 +15,22 @@ class PDF
     private $alinhamento;//text-align
 
     private $cor; //font-color
-    private $fundo;//background-color
+    private $cor_fundo;//background-color
 
     private $letra_familia;//font-family
     private $letra_tamanho;//font-size
     private $letra_tipo;//font-weight
 
+    private $contorno;//mostra um contorno para todas as BOX
     //===============================================================================================
-    public function __construct($formato='A4', $orientacao='P', $modo='utf-8')
+    public function __construct($contorno=false, $formato='A4', $orientacao='P', $modo='utf-8')
     {
         // criar a instância da classe Mpdf
         $this->pdf = new Mpdf(['format'=>$formato, 'orientation'=>$orientacao, 'mode'=>$modo]);
         //iniciar o html
         $this->iniciar_html();
-    }
-    //===============================================================================================
-    public function set_template($template)
-    {
-        $this->pdf->SetDocTemplate($template);
+        //ao instanciar a classe - new PDF(true/false)(para mostar ou não o contorno)
+        $this->contorno=$contorno;
     }
     //===============================================================================================
     public function iniciar_html()
@@ -48,28 +46,44 @@ class PDF
         $this->pdf->Output();
     }
     //===============================================================================================
+    public function set_template($template)
+    {
+        //define um template(pdf) para ser usado como fundo do nosso pdf final
+        $this->pdf->SetDocTemplate($template);
+    }
+    //===============================================================================================
     public function nova_pagina()
     {
         //acrescentar uma nova pagina ao pdf
         $this->html .= '<pagebreak>';
-
     }
     //===============================================================================================
-    public function escrever($texto)
+    // métodos para definir posição e dimensão do texto
+    //===============================================================================================
+    public function set_x($x)
     {
-        //escreve texto no documento
-        // $this->html .= "<div style='color:green;font-size:30pt'>Texto de teste: </div>";
-        $this->html .= $texto;
+        $this->x=$x;
     }
     //===============================================================================================
-    // métodos para definir posição e dimanção do texto
-    // NO VIDEO 99 e 100 DA PLAYLIST WEBSTORE - agora já entendi pq KKKKKKKKKKKKKKKKKKK
-    //  eu não construi TODOS os metodos ensinados - vou PULAR por enquanto achei desnecessário
+    public function set_y($y)
+    {
+        $this->y=$y;
+    }
     //===============================================================================================
     public function posicao($x, $y)
     {
         $this->x=$x;
         $this->y=$y;
+    }
+    //===============================================================================================
+    public function largura($largura)
+    {
+        $this->largura=$largura;
+    }
+    //===============================================================================================
+    public function altura($altura)
+    {
+        $this->altura=$altura;
     }
     //===============================================================================================
     public function dimensao($largura, $altura)
@@ -84,5 +98,67 @@ class PDF
         $this->dimensao($largura, $altura);
     }
     //===============================================================================================
-    
+    public function cor_text($cor)
+    {
+        $this->cor=$cor;
+    }
+    //===============================================================================================
+    public function cor_fundo($cor_fundo)
+    {
+        $this->cor_fundo=$cor_fundo;
+    }
+    //===============================================================================================
+    public function text_align($align)
+    {
+        $this->alinhamento=$align;
+    }
+    //===============================================================================================
+    public function set_font_family($familia)
+    {
+        $familia_possiveis=['Courier New','Arial','Franklin Gothic Medium','Lucida Sans','Times New Roman'];
+        // verifica se $familia pertence ao conjunto de letras permitidos
+        if(!in_array($familia, $familia_possiveis)){
+            $this->letra_familia='Arial';
+        }else{
+            $this->letra_familia=$familia;
+        }
+    }
+    //===============================================================================================
+    public function font_size($tamanho)
+    {
+        $this->letra_tamanho=$tamanho;
+    }
+    //===============================================================================================
+    public function letra_espessura($espessura)
+    {
+        $this->letra_tipo=$espessura;
+    }
+    //===============================================================================================
+    public function escrever($texto)
+    {
+        //escreve texto no documento HTML
+        $this->html .= '<div style="';
+        $this->html .= 'position: absolute;';
+        // posição e dimensão
+        $this->html .= 'left:'.$this->x.'px;';
+        $this->html .= 'top:'.$this->y.'px;';
+        $this->html .= 'width:'.$this->largura.'px;';
+        $this->html .= 'height:'.$this->altura.'px;';
+        $this->html .= 'text-align:'.$this->alinhamento.';';
+        // cor de fundo
+        $this->html .= 'background-color:'.$this->cor_fundo.';';
+        //fontes - cor - estilos
+        $this->html .= 'color:'.$this->cor.';';
+        $this->html .= 'font-family:'.$this->letra_familia.';';
+        $this->html .= 'font-size:'.$this->letra_tamanho.';';
+        $this->html .= 'font-weight:'.$this->letra_tipo.';';
+        
+        //mostrar area de contorno
+        if($this->contorno){
+            $this->html .= 'box-shadow: inset 0px 0px 0px 1px #000;';
+        }
+
+        $this->html .= '">'.$texto.'</div>';
+        // return $this->html;
+    }
 }

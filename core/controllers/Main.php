@@ -502,24 +502,6 @@ class Main
         $resultado = $encomenda->efetuar_pagamento($codigo_encomenda);
         echo (int)$resultado;
     }
-    //============================================================================
-    public function criar_pdf()
-    {   
-        //getcwd() -> usado para indicar o endereço atual
-        // die(getcwd());
-
-        $pdf = new PDF();
-        //definir um template de fundo
-        $pdf->set_template(getcwd().'/assets/templates_pdf/Template_teste.pdf');
-
-        $texto="<div style='color:green;font-size:30pt;text-align:center;'>Titulo de teste: </div>";
-        $texto .="<div style='color:red;font-size:12pt;text-align:right;position:absolute;top:400px;width:50%;padding:50px;'>Aqui vai um texte enormemente <br>extenso apenas para testes ......<br>Texto de teste... </div>";
-
-        $pdf->escrever($texto);
-
-        $pdf->apresentar_pdf();
-        //usar os métodos do objeto $pdf para constrir o HTML e fazer o output
-
-    }
+    
 
 }

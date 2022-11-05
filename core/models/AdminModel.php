@@ -72,6 +72,16 @@ class AdminModel
     
     }
     //==================================================================================
+    //EU QUE CRIEI PARA TESTAR MAS AINDA NÃO FUNCIONOU
+    public function total_encomenda_cancelada()
+    {
+        //vai buscar a quantidade de encomendas CANCELADAS
+        $bd = new Database();
+        $resultado = $bd->select("SELECT COUNT(*) AS total FROM encomendas WHERE status='CANCELADA' ");
+        return $resultado[0]->total;
+    
+    }
+    //==================================================================================
     public function lista_encomenda($filtro, $id_cliente)
     {
         $bd = new Database();
