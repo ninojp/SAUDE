@@ -389,7 +389,7 @@ class Admin
         //criar o PDF com os detalhes da encomenda
         $pdf = new PDF(false);
         $pdf->set_template(getcwd().'/assets/templates_pdf/templat.pdf');
-//--------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------
         //mas bora improvisar... DEU CERTO USEI MAS DEPOIS DE CRIAR AS DEFINIÇÕES ORIGINAIS DA PLAYLIST DO PROFESSOR FOI NECESSÁRIO COMENTAR TUDO
         // $texto = "<style>#div_cliente { position: absolute; top: 130px; left: 100px; color: #fff;}
         // #div_encomenda{ position: absolute; top: 350px; left: 100px;}
@@ -415,7 +415,7 @@ class Admin
         // <span class='span_desc'>Preço por Unidade:</span> ".$produto->preco_unidade."<br>
         // <span class='span_desc'>Preço da Total:</span><br>
         // </p></div>";
-//--------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------
         //titulo - Dados do Cliente:
         $pdf->posicao_dimensao(150, 125, 180, 25);
         $pdf->cor_text('#000');
@@ -460,9 +460,171 @@ class Admin
         $pdf->text_align('left');
         $pdf->escrever($encomenda['encomenda']->data_encomenda.'<br>'.$encomenda['encomenda']->codigo_encomenda.'<br>'.$encomenda['encomenda']->status.'<br>'.$encomenda['encomenda']->mensagem.'<br>');
 
+        //titulo - Dados do Produto:
+        $pdf->posicao_dimensao(150, 600, 180, 25);
+        $pdf->cor_text('#000');
+        $pdf->text_align('center');
+        $pdf->font_size('24pt');
+        $pdf->letra_espessura('bold');
+        $pdf->escrever('Dados do Produto:');
+        
+        //lista dos produtos da encomenda
+        $y=625;
+        $total_encomenda = 0;
+        $pdf->font_size('34pt');
+        foreach($encomenda['lista_produtos'] as $produto){
+            //quantidade e descrição dos produtos
+            $pdf->posicao_dimensao(100, $y, 280, 35);
+            $pdf->letra_espessura('normal');
+            $pdf->text_align('left');
+            $pdf->escrever($produto->quantidade.' Unidade(s) - '.$produto->designacao_produto);
+            //calculo da quantidade x o preço 
+            $pdf->posicao_dimensao(450, $y, 180, 35);
+            $pdf->text_align('righ');
+            $preco=$produto->quantidade * $produto->preco_unidade;
+            $total_encomenda += $preco;
+            $pdf->escrever('R$ '.number_format($preco,2,',','.'));
+            $y+=28;
+        }
+        //apresenta o preço do TOTAL
+        $pdf->posicao_dimensao(150, 750, 380, 25);
+        $pdf->cor_text('#000');
+        $pdf->text_align('center');
+        $pdf->font_size('44pt');
+        $pdf->letra_espessura('bold');
+        $pdf->escrever('O Valor Total da encomenda é:  R$ '.number_format($total_encomenda,2,',','.'));
+
+        //tranformar o html para pdf
         $pdf->apresentar_pdf();
     }
+    //==================================================================================
+    public function enviar_pdf_encomenda()
+    {
+        //verificar se existe um Admin logado
+        if (!Store::adminLogado()) {
+            Store::redirect('inicio',true);
+            return;
+        }
+        //buscar o id_encomenda
+        $id_encomenda = null;
+        if(isset($_GET['e'])){
+            $id_encomenda = Store::aesDesencriptar($_GET['e']);
+        }
+        if(gettype($id_encomenda)!='string'){
+            Store::redirect('inicio',true);
+            return;
+        }
+        //vai buscar todos os dados da encomenda
+        $admin_model = new AdminModel();
+        $encomenda = $admin_model->buscar_detalhe_encomenda($id_encomenda);
+        foreach($encomenda['lista_produtos'] as $produto);
 
+        //criar o PDF com os detalhes da encomenda
+        $pdf = new PDF(false);
+        $pdf->set_template(getcwd().'/assets/templates_pdf/templat.pdf');
+    
+        //titulo - Dados do Cliente:
+        $pdf->posicao_dimensao(150, 125, 180, 25);
+        $pdf->cor_text('#000');
+        $pdf->text_align('center');
+        $pdf->font_size('24pt');
+        $pdf->letra_espessura('bold');
+        $pdf->escrever('Dados do Cliente:');
+        //campos de dados do cliente
+        $pdf->posicao_dimensao(100, 150, 80, 100);
+        $pdf->cor_text('#000');
+        $pdf->text_align('left');
+        $pdf->font_size('18pt');
+        $pdf->letra_espessura('bold');
+        $pdf->escrever('Nome: <br>Email: <br>Telefone: <br>Endereço: <br>Cidade: <br>');
+        //informações do cliente
+        $pdf->posicao_dimensao(180, 150, 300, 100);
+        $pdf->cor_text('#000');
+        $pdf->font_size('14pt');
+        $pdf->letra_espessura('normal');
+        $pdf->text_align('left');
+        $pdf->escrever($encomenda['encomenda']->nome_completo.'<br>'.$encomenda['encomenda']->email.'<br>'.$encomenda['encomenda']->telefone.'<br>'.$encomenda['encomenda']->endereco.'<br>'.$encomenda['encomenda']->cidade.'<br>');
+      
+        //titulo - Dados da Encomenda:
+        $pdf->posicao_dimensao(150, 350, 180, 25);
+        $pdf->cor_text('#000');
+        $pdf->text_align('center');
+        $pdf->font_size('24pt');
+        $pdf->letra_espessura('bold');
+        $pdf->escrever('Dados da Encomenda:');
+        //campos de dados da Encomenda
+        $pdf->posicao_dimensao(100, 375, 80, 100);
+        $pdf->cor_text('#000');
+        $pdf->text_align('left');
+        $pdf->font_size('18pt');
+        $pdf->letra_espessura('bold');
+        $pdf->escrever('Data: <br>Codigo: <br>Estado: <br>MSG: <br>');
+        //informações da Encomenda
+        $pdf->posicao_dimensao(180, 375, 300, 100);
+        $pdf->cor_text('#000');
+        $pdf->font_size('14pt');
+        $pdf->letra_espessura('normal');
+        $pdf->text_align('left');
+        $pdf->escrever($encomenda['encomenda']->data_encomenda.'<br>'.$encomenda['encomenda']->codigo_encomenda.'<br>'.$encomenda['encomenda']->status.'<br>'.$encomenda['encomenda']->mensagem.'<br>');
+
+        //titulo - Dados do Produto:
+        $pdf->posicao_dimensao(150, 600, 180, 25);
+        $pdf->cor_text('#000');
+        $pdf->text_align('center');
+        $pdf->font_size('24pt');
+        $pdf->letra_espessura('bold');
+        $pdf->escrever('Dados do Produto:');
+        
+        //lista dos produtos da encomenda
+        $y=625;
+        $total_encomenda = 0;
+        $pdf->font_size('34pt');
+        foreach($encomenda['lista_produtos'] as $produto){
+            //quantidade e descrição dos produtos
+            $pdf->posicao_dimensao(100, $y, 280, 35);
+            $pdf->letra_espessura('normal');
+            $pdf->text_align('left');
+            $pdf->escrever($produto->quantidade.' Unidade(s) - '.$produto->designacao_produto);
+            //calculo da quantidade x o preço 
+            $pdf->posicao_dimensao(450, $y, 180, 35);
+            $pdf->text_align('righ');
+            $preco=$produto->quantidade * $produto->preco_unidade;
+            $total_encomenda += $preco;
+            $pdf->escrever('R$ '.number_format($preco,2,',','.'));
+            $y+=28;
+        }
+        //apresenta o preço do TOTAL
+        $pdf->posicao_dimensao(150, 750, 380, 25);
+        $pdf->cor_text('#000');
+        $pdf->text_align('center');
+        $pdf->font_size('44pt');
+        $pdf->letra_espessura('bold');
+        $pdf->escrever('O Valor Total da encomenda é:  R$ '.number_format($total_encomenda,2,',','.'));
+
+        //definir permissões e proteção para o pdf
+        $permissoes=['print'];
+            //opções de permissão
+            //'copy', 'print','modify','annot-forms','fill-forms','extract','assemble','print-highres'
+        $pdf->set_permissoes($permissoes,'senha');//basta remover, para ficar sem senha de acesso ao pdf
+
+        //nos testes era apresentado
+        // $pdf->apresentar_pdf();
+        //Guardar o pdf
+        $arquivo = $encomenda['encomenda']->codigo_encomenda . '_' . date('YmdHis').'.pdf';
+        $pdf->guardar_pdf($arquivo);
+        
+        //------------------------------------------------------------------------------------------
+        // ENVIAR O EMAIL com o arquivo em anexo
+        // $email = new EnviarEmail();
+        // $email->enviar_pdf_encomenda_cliente($encomenda['encomenda']->email, $arquivo);
+
+        // ELIMINAR o arquivo enviado por email(se quiser)
+        // unlink(PDF_PATH.$arquivo);
+        //-----------------------------------------------------------------------------------------
+        
+        //redirecionar para a pagina da encomenda
+        Store::redirect('detalhe_encomenda&e='.$_GET['e'], true);
+    }
     //============================================================================
     //  TESTES DE CRIAÇÃO DE PDF
     //============================================================================

@@ -46,6 +46,13 @@ class PDF
         $this->pdf->Output();
     }
     //===============================================================================================
+    public function guardar_pdf($nome_arquivo)
+    {
+        //guardar o ficheiro para um arquivo .pdf
+        $this->pdf->WriteHTML($this->html);
+        $this->pdf->Output(PDF_PATH.$nome_arquivo);
+    }
+    //===============================================================================================
     public function set_template($template)
     {
         //define um template(pdf) para ser usado como fundo do nosso pdf final
@@ -132,6 +139,12 @@ class PDF
     public function letra_espessura($espessura)
     {
         $this->letra_tipo=$espessura;
+    }
+    //===============================================================================================
+    public function set_permissoes($permissoes=[], $password='')
+    {
+        //define permissões para o documento pdf a ser criado
+        $this->pdf->SetProtection($permissoes, $password);
     }
     //===============================================================================================
     public function escrever($texto)

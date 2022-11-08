@@ -25,6 +25,9 @@ define('MAIL_FROM', 'meuemailparablog@gmail.com');
 define('MAIL_PASS', 'dnixpmkkzyyysodx');
 define('MAIL_PORT', '587');
 
+//PDFs
+define('PDF_PATH', "C:/xampp/htdocs/SAUDE/temp_pdf/");
+
 //=================================================================================================
 // USUARIOS ATUAIS
 // admin@admin.com          -> admin        -> 123456 (acho eu)

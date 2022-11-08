@@ -23,8 +23,9 @@ use core\classes\Store; ?>
                     <button type="button" class="header_menu_admin badge bg-info" onclick="apresentarModal()"><?=$encomenda->status;?></button>
                     </div>
                     <?php if($encomenda->status == 'PROCESSAMENTO'):?>
-                        <div class="col-1">imprimir:<br>
-                            <a class="btn btn-sm btn-outline-info" href="?a=criar_pdf_encomenda&e=<?=Store::aesEcncriptar($encomenda->id_encomenda)?>">PDF</a>
+                        <div class="col-1">
+                            <a class="btn btn-sm btn-outline-info" href="?a=criar_pdf_encomenda&e=<?=Store::aesEcncriptar($encomenda->id_encomenda)?>">Ver PDF</a><br>
+                            <a class="btn btn-sm btn-outline-info" href="?a=enviar_pdf_encomenda&e=<?=Store::aesEcncriptar($encomenda->id_encomenda)?>">Enviar PDF</a><br>
                         </div>
                     <?php endif; ?>
                     <div class="col-2">Codigo Encomenda:<br><span class="fw-bold"><?=$encomenda->codigo_encomenda;?></span></div>

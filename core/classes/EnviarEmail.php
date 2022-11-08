@@ -109,4 +109,42 @@ class EnviarEmail{
         return false;
     }
     }
+    //=================================================================================
+    public function enviar_pdf_encomenda_cliente($email_cliente, $arquivo)
+    {
+        $mail = new PHPMailer(true);
+    try {
+        //Opções do SERVIDOR
+        $mail->SMTPDebug = SMTP::DEBUG_OFF;
+        $mail->CharSet = 'UTF-8';
+        $mail->isSMTP(); //Send using SMTP
+        $mail->Host = MAIL_HOST; //Set the SMTP server to send through
+        $mail->SMTPAuth = true;  //Enable SMTP authentication
+        $mail->Username   = MAIL_FROM; //SMTP username
+        $mail->Password   = MAIL_PASS; //SMTP password
+
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;            
+        $mail->Port = MAIL_PORT;  
+
+        //Emissor e receptor
+        $mail->setFrom(MAIL_FROM, APP_NAME);
+        $mail->addAddress($email_cliente);     //endereço que vai receber o email 
+
+        //Conteudo da menssagem
+        $mail->isHTML(true);                                  //Set email format to HTML
+        $mail->Subject = APP_NAME.' - Envio do PDF com detalhes da encomenda.';
+        $html = '<h3>Segue em anexo o PDF com os detalhes de sua encomenda.</h3>';
+        $html .= '<p><i><small>'.APP_NAME.'</small></i></p>';
+        
+        //anexar arquivo
+        $mail->addAttachment(PDF_PATH.$arquivo);
+
+        $mail->Body = $html;
+
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        return false;
+    }
+    }
 }
