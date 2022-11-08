@@ -615,8 +615,8 @@ class Admin
         
         //------------------------------------------------------------------------------------------
         // ENVIAR O EMAIL com o arquivo em anexo
-        // $email = new EnviarEmail();
-        // $email->enviar_pdf_encomenda_cliente($encomenda['encomenda']->email, $arquivo);
+        $email = new EnviarEmail();
+        $email->enviar_pdf_encomenda_cliente($encomenda['encomenda']->email, $arquivo);
 
         // ELIMINAR o arquivo enviado por email(se quiser)
         // unlink(PDF_PATH.$arquivo);
