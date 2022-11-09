@@ -294,8 +294,8 @@ class Carrinho
         //enviar email para o cliente com os dados da encomenda e pagamento
 
         //envio do email (encomenda) para o USUARIO
-        // $email = new EnviarEmail();
-        // $resultado = $email->enviar_email_confirmacao_encomenda($_SESSION['usuario'],$dados_encomenda);
+        $email = new EnviarEmail();
+        $resultado = $email->enviar_email_confirmacao_encomenda($_SESSION['usuario'],$dados_encomenda);
         //--------------------------------------------------------------------------
         
         //--------------------------------------------------------------------------
