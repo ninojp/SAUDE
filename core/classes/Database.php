@@ -1,11 +1,8 @@
 <?php
-
 namespace core\classes;
-
 use Exception;
 use PDO;
 use PDOException;
-
 class Database
 {
     //gestão de bases de dados
@@ -14,15 +11,7 @@ class Database
     private function ligar()
     {
         //Ligar à base de dados
-        $this->ligacao = new PDO(
-            'mysql:' .
-                'host=' . MYSQL_SERVER . ';' .
-                'dbname=' . MYSQL_DATABASE . ';' .
-                'charset=' . MYSQL_CHARSET,
-            MYSQL_USER,
-            MYSQL_PASS,
-            array(PDO::ATTR_PERSISTENT => true)
-        );
+        $this->ligacao = new PDO('mysql:host='.MYSQL_SERVER.';dbname='.MYSQL_DATABASE.';charset='.MYSQL_CHARSET, MYSQL_USER, MYSQL_PASS, array(PDO::ATTR_PERSISTENT => true));
         //Debug
         $this->ligacao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
     }
@@ -49,9 +38,7 @@ class Database
         }
         //Liga ao DB
         $this->ligar();
-
         $resultados = null;
-
         //Cumunica
         try {
             //comunicação com o db
@@ -68,10 +55,8 @@ class Database
             //caso exista erro
             return false;
         }
-
         //Desliga da db
         $this->desligar();
-
         //Devolve o resultados obtidos
         return $resultados;
     }
