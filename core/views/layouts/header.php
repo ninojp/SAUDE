@@ -18,6 +18,7 @@ if(isset($_SESSION['carrinho'])){
             </a>
         </div>
         <div class="col-6 text-end p-3">
+            <a class="nav_link btn btn-sm btn-success" href="https://localhost/SAUDE/public/admin/" target="_blank">ADM</a>
             <a class="nav_link btn btn-sm btn-success" href="?a=inicio">Início</a>
             <a class="nav_link btn btn-sm btn-success" href="?a=loja">Loja</a>
 

@@ -12,7 +12,7 @@ define('STATUS',  ['PENDENTE','PROCESSAMENTO','CANCELADA','ENVIADA','CONCLUIDA']
 define('MYSQL_SERVER', 'localhost');
 define('MYSQL_DATABASE', 'db_saude');
 define('MYSQL_USER', 'NinoJP');
-define('MYSQL_PASS', 'chNd@w40_(rWpyQC');
+define('MYSQL_PASS', '3RtsEpuR21!@');
 define('MYSQL_CHARSET', 'utf8');
 
 //AES Encriptação
